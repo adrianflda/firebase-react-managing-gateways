@@ -1,24 +1,20 @@
-import {
-  AppBar,
-  Toolbar,
-  CssBaseline,
-  Typography,
-  makeStyles,
-  useTheme,
-  useMediaQuery,
-  createStyles,
-  Theme,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { RouterPathEnum } from "../../enums/RouterPathEnum";
-import AuthStatus from "../Auth/AuthStatus";
-import DrawerComponent from "./Drawer";
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Link } from 'react-router-dom';
+import { RouterPathEnum } from '../../enums/RouterPathEnum';
+import AuthStatus from '../Auth/AuthStatus';
+import DrawerComponent from './Drawer';
+import { makeStyles, createStyles } from '@mui/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { createTheme } from '@mui/material/styles';
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  navlinks: {
-    marginLeft: theme.spacing(5),
-    display: "flex",
-  },
+const useStyles = makeStyles((theme: any) => createStyles({
   logo: {
     flexGrow: 1,
     cursor: "pointer",
@@ -27,46 +23,49 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     textDecoration: "none",
     color: "white",
     fontSize: "20px",
-    marginLeft: theme.spacing(20),
     "&:hover": {
       color: "yellow",
       borderBottom: "1px solid white",
     },
   },
-}));
+})) as any;
 
-function Navbar() {
+const theme = createTheme({});
+
+const Navbar = () => {
   const classes = useStyles();
-  const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="static">
-      <CssBaseline />
-      <Toolbar>
-        <Typography variant="h4" className={classes.logo}>
-          GATEWAY
-        </Typography>
-        {isMobile ? (
-          <DrawerComponent />
-        ) : (
-          <div className={classes.navlinks}>
-            <Link to={RouterPathEnum.HOME} className={classes.link}>
-              HOME
-            </Link>
-            <Link to={RouterPathEnum.GATEWAY} className={classes.link}>
-              GATEWAY
-            </Link>
-            <Link to={RouterPathEnum.DEVICE} className={classes.link}>
-              DEVICE
-            </Link>
-            <Link to={RouterPathEnum.LOGIN} className={classes.link}>
-              <AuthStatus />
-            </Link>
-          </div>
-        )}
-      </Toolbar>
-    </AppBar>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+            Firebase React Managing Gateways
+          </Typography>
+          {isMobile ? (
+            <DrawerComponent />
+          ) : (
+            <div className={classes.navlinks}>
+              <Link to={RouterPathEnum.HOME} className={classes.link}>
+                HOME
+              </Link>
+              <Link to={RouterPathEnum.GATEWAY} className={classes.link}>
+                GATEWAY
+              </Link>
+              <Link to={RouterPathEnum.DEVICE} className={classes.link}>
+                DEVICE
+              </Link>
+              <Link to={RouterPathEnum.LOGIN} className={classes.link}>
+                <AuthStatus />
+              </Link>
+              <Button color="inherit">Login</Button>
+            </div>
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 }
+
 export default Navbar;

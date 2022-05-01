@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import HomeView from '../components/Home/HomeView';
-import GatewayListPage from '../components/Gateway/GatewayListPage';
+import GatewayList from '../components/Gateway/GatewayList';
 import DeviceListPage from '../components/Device/DeviceListPage';
 import { RouterPathEnum } from '../enums/RouterPathEnum';
 import LoginPage from "../components/Auth/LoginPage";
@@ -19,7 +19,7 @@ const Router = () => {
                     path={RouterPathEnum.GATEWAY}
                     element={
                         <RequireAuth>
-                            <GatewayListPage />
+                            <GatewayList />
                         </RequireAuth>
                     }
                 />
