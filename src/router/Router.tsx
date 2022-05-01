@@ -3,20 +3,20 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import HomeView from '../components/Home/HomeView';
 import GatewayList from '../components/Gateway/GatewayList';
 import DeviceListPage from '../components/Device/DeviceListPage';
-import { RouterPathEnum } from '../enums/RouterPathEnum';
 import LoginPage from "../components/Auth/LoginPage";
 import RequireAuth from "../components/Auth/RequireAuth";
 import Navbar from "../components/Navbar/Navbar";
+import { ROUTES } from "../constants/routes";
 
 const Router = () => {
     return (
         <BrowserRouter>
             <Navbar />
             <Routes>
-                <Route path={RouterPathEnum.HOME} element={<HomeView />} />
-                <Route path={RouterPathEnum.LOGIN} element={<LoginPage />} />
+                <Route path={ROUTES.HOME.staticRoute} element={<HomeView />} />
+                <Route path={ROUTES.LOGIN.staticRoute} element={<LoginPage />} />
                 <Route
-                    path={RouterPathEnum.GATEWAY}
+                    path={ROUTES.GATEWAYS.staticRoute}
                     element={
                         <RequireAuth>
                             <GatewayList />
@@ -24,7 +24,7 @@ const Router = () => {
                     }
                 />
                 <Route
-                    path={RouterPathEnum.DEVICE}
+                    path={ROUTES.DEVICES.staticRoute}
                     element={
                         <RequireAuth>
                             <DeviceListPage />
@@ -36,7 +36,7 @@ const Router = () => {
                     element={
                         <div>
                             <h2>404 Page not found etc</h2>
-                            <Link to={RouterPathEnum.HOME}>Home</Link>
+                            <Link to={ROUTES.HOME.staticRoute}>Home</Link>
                         </div>
                     }
                 />

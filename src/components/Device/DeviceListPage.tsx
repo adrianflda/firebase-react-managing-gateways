@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { RouterPathEnum } from "../../enums/RouterPathEnum";
+import { ROUTES } from "../../constants/routes";
 
 const DeviceListPage = ({ history }: any) => {
     return (
         <div>
             <div>DeviceListPage</div>
-            <Link to={RouterPathEnum.HOME}>HOME</Link>
+            <Link to={ROUTES.HOME.staticRoute}>HOME</Link>
         </div>
     );
 };
