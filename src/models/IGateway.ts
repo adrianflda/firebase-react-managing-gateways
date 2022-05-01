@@ -4,5 +4,6 @@ export default interface IGateway {
     serial: string,
     name: string,
     address: string,
-    devices: IDevice[]
+    devices: IDevice[],
+    deleted: boolean
 }

@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import {
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  makeStyles,
-} from "@material-ui/core";
 import { Link } from "react-router-dom";
-
-import MenuIcon from "@material-ui/icons/Menu";
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from '@mui/material/IconButton';
+import { makeStyles } from '@mui/styles';
 import { RouterPathEnum } from "../../enums/RouterPathEnum";
 import AuthStatus from "../Auth/AuthStatus";
 
@@ -23,11 +20,12 @@ const useStyles = makeStyles(() => ({
   icon: {
     color: "white"
   }
-}));
+})) as any;
 
 function DrawerComponent() {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
+
   return (
     <>
       <Drawer

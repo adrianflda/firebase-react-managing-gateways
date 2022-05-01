@@ -1,5 +1,5 @@
 import React from "react";
-import AuthContextType from "../interfaces/IAuthContextType";
+import AuthContextType from "../models/IAuthContextType";
 
 const AuthContext = React.createContext<AuthContextType>(null!);
 
