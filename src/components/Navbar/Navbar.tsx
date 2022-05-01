@@ -2,70 +2,124 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
-import { RouterPathEnum } from '../../enums/RouterPathEnum';
-import AuthStatus from '../Auth/AuthStatus';
-import DrawerComponent from './Drawer';
-import { makeStyles, createStyles } from '@mui/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { createTheme } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
+import ProfileAvatar from '../Profile/ProfileAvatar';
+import { ROUTES } from '../../constants/routes';
+import { useNavigate } from 'react-router-dom';
 
-const useStyles = makeStyles((theme: any) => createStyles({
-  logo: {
-    flexGrow: 1,
-    cursor: "pointer",
-  },
-  link: {
-    textDecoration: "none",
-    color: "white",
-    fontSize: "20px",
-    "&:hover": {
-      color: "yellow",
-      borderBottom: "1px solid white",
-    },
-  },
-})) as any;
-
-const theme = createTheme({});
+const PAGE_LINKS = Object.values(ROUTES).filter((route) => route.isNavbarItem);
 
 const Navbar = () => {
-  const classes = useStyles();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleClick = (route: string) => {
+    handleCloseNavMenu();
+    navigate(route);
+  }
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
+          >
             Firebase React Managing Gateways
           </Typography>
-          {isMobile ? (
-            <DrawerComponent />
-          ) : (
-            <div className={classes.navlinks}>
-              <Link to={RouterPathEnum.HOME} className={classes.link}>
-                HOME
-              </Link>
-              <Link to={RouterPathEnum.GATEWAY} className={classes.link}>
-                GATEWAY
-              </Link>
-              <Link to={RouterPathEnum.DEVICE} className={classes.link}>
-                DEVICE
-              </Link>
-              <Link to={RouterPathEnum.LOGIN} className={classes.link}>
-                <AuthStatus />
-              </Link>
-              <Button color="inherit">Login</Button>
-            </div>
-          )}
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {PAGE_LINKS.map((route) => (
+                <MenuItem
+                  key={route.name}
+                  onClick={() => handleClick(route.staticRoute)}
+                >
+                  <Typography textAlign="center">{route.name}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
+          >
+            Firebase React Managing Gateways
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {PAGE_LINKS.map((route) => (
+              <Button
+                key={route.name}
+                onClick={() => handleClick(route.staticRoute)}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {route.name}
+              </Button>
+            ))}
+          </Box>
+          <ProfileAvatar
+            handleOpenUserMenu={handleOpenUserMenu}
+            handleCloseUserMenu={handleCloseUserMenu}
+            anchorElUser={anchorElUser}
+          />
         </Toolbar>
-      </AppBar>
-    </Box>
+      </Container>
+    </AppBar>
   );
-}
+};
 
 export default Navbar;
