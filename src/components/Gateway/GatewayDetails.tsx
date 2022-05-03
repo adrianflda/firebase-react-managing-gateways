@@ -161,7 +161,6 @@ const GatewayDetails = () => {
                                     </button>
                             }
                         </Grid>
-
                     </Grid>
                 </Grid>
             </Paper>
