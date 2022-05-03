@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import HomeView from '../components/Home/HomeView';
-import GatewayList from '../components/Gateway/GatewayList';
+import GatewayList from '../components/Gateway/GatewayTable';
 import DeviceListPage from '../components/Device/DeviceListPage';
 import LoginPage from "../components/Auth/LoginPage";
 import RequireAuth from "../components/Auth/RequireAuth";
 import Navbar from "../components/Navbar/Navbar";
 import { ROUTES } from "../constants/routes";
+import GatewayDetails from "../components/Gateway/GatewayDetails";
 
 const Router = () => {
     return (
@@ -20,6 +21,14 @@ const Router = () => {
                     element={
                         <RequireAuth>
                             <GatewayList />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path={ROUTES.GATEWAYS_DETAILS.staticRoute}
+                    element={
+                        <RequireAuth>
+                            <GatewayDetails />
                         </RequireAuth>
                     }
                 />

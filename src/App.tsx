@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import 'papercss/dist/paper.min.css';
 import AuthProvider from "./components/Auth/AuthProvider";
 import Router from "./router/Router";
 import rootReducer from './reducers';
@@ -12,6 +13,6 @@ export default function App() {
       <AuthProvider>
         <Router />
       </AuthProvider>
-    </Provider>
+    </Provider >
   );
 }
