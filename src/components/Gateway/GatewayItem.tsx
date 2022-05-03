@@ -13,7 +13,10 @@ import { toggleGatewayDelete } from '../../actions';
 // Toggle gateway completed state
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onItemRemove: (serial: string) => dispatch(toggleGatewayDelete(serial))
+        onItemRemove: (e: React.MouseEvent<HTMLElement>, serial: string) => {
+            e.preventDefault();
+            dispatch(toggleGatewayDelete(serial));
+        }
     }
 }
 
@@ -21,29 +24,30 @@ const mapDispatchToProps = (dispatch: any) => {
 const GatewayItem = ({ serial, name, deleted, address, devices, onItemRemove, onItemClick }: any) => {
     return (
         <ListItem
-            onClick={() => onItemClick(serial)}
+            className={"padding-small margin-small " + (deleted ? 'background-primary' : 'shadow shadow-hover')}
+            style={deleted ? { textDecoration: 'line-through' } : {}}
             secondaryAction={
                 <IconButton
                     edge="end"
                     aria-label="delete"
-                    onClick={e => onItemRemove(serial)}
+                    onClick={e => onItemRemove(e, serial)}
                 >
                     <DeleteIcon />
                 </IconButton>
             }
         >
-            <ListItemAvatar>
+            <ListItemAvatar onClick={(e) => onItemClick(e, serial)}>
                 <Avatar>
                     <DnsIcon />
                 </Avatar>
             </ListItemAvatar>
             <ListItemText
-                className={"padding-small margin-small " + (deleted ? 'background-primary' : 'shadow shadow-hover')}
-                style={deleted ? { textDecoration: 'line-through' } : {}}
+                onClick={(e) => onItemClick(e, serial)}
                 primary={name}
                 secondary={serial}
             />
             <ListItemText
+                onClick={(e) => onItemClick(e, serial)}
                 primary={address}
                 secondary={`Devices: ${[...devices].length}`}
             />

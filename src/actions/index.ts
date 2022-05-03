@@ -1,7 +1,12 @@
-import { ADD_GATEWAY, CLEAR_GATEWAYS, TOGGLE_GATEWAY_DELETE } from '../constants/actions';
+import { ADD_GATEWAY, CLEAR_GATEWAYS, TOGGLE_GATEWAY_DELETE, UPDATE_GATEWAY } from '../constants/actions';
 
 export const addGateway = (payload: any) => ({
     type: ADD_GATEWAY,
+    payload
+});
+
+export const updateGateway = (payload: any) => ({
+    type: UPDATE_GATEWAY,
     payload
 });
 

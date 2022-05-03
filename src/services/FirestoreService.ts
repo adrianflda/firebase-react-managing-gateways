@@ -29,7 +29,7 @@ class GatewayDataService {
         return Promise.resolve(GATEWAYS);
     }
     async get(serial: string): Promise<IGateway | undefined> {
-        return Promise.resolve(undefined);
+        return Promise.resolve(GATEWAYS.find((gateway) => gateway.serial === serial));
     }
     async create(data: IGateway): Promise<IGateway> {
         return Promise.resolve(data);
@@ -45,6 +45,21 @@ class GatewayDataService {
     }
     async findByName(name: string): Promise<IGateway[]> {
         return Promise.resolve([]);
+    }
+    isValidateGateway(gateway: IGateway): boolean {
+        if (!gateway) {
+            throw new Error('no gateway to validate');
+        }
+        if (!gateway.serial) {
+            throw new Error('no serial found');
+        }
+        if (gateway.address && !/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(gateway.address)) {
+            throw new Error('no valid ipv4 address');
+        }
+        if (gateway.devices && gateway.devices.length > 10) {
+            throw new Error('only 10 devices by gateway allowed');
+        }
+        return true;
     }
 }
 

@@ -2,7 +2,7 @@ interface IRoute {
     name: string;
     isNavbarItem?: boolean;
     staticRoute: string;
-    dynamicRoute?: (param: string) => {};
+    dynamicRoute?: (param: string) => string;
 }
 
 interface IRoutes {
@@ -30,8 +30,8 @@ export const ROUTES: IRoutes = {
     },
     GATEWAYS_DETAILS: {
         name: "Gateways Details",
-        staticRoute: '/gateways',
-        dynamicRoute: (serial: string) => `${ROUTES.GATEWAYS}/${serial}`
+        staticRoute: '/gateways/:serial',
+        dynamicRoute: (serial: string) => `${ROUTES.GATEWAYS.staticRoute}/${serial}`
     },
     DEVICES: {
         name: 'Devices',
