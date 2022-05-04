@@ -10,15 +10,19 @@ import {
     Typography,
     Table,
     TableHead,
-    TableBody
+    TableBody,
+    Switch,
+    FormControlLabel
 } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import IGateway from "../../models/IGateway";
-import { toggleGatewayDelete } from "../../actions";
+import { toggleGatewayDelete, updateGateway } from "../../actions";
 import { DeleteSweep } from "@mui/icons-material";
+import IDevice from "../../models/IDevice";
+import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 
 const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void }) => {
     const { row } = props;
@@ -29,6 +33,16 @@ const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void })
         e.preventDefault();
         dispatch(toggleGatewayDelete(serial));
     }
+
+    const handleChangeStatus = (e: any) => {
+        const { name: uuid, checked } = e.target;
+        const deviceIndex = (row.devices || []).findIndex((device: IDevice) => `${device.uuid}` === uuid);
+        if (deviceIndex > -1) {
+            const newDevice: IDevice = { ...row.devices[deviceIndex], status: checked ? DeviceStatusEnum.online : DeviceStatusEnum.offline };
+            row.devices.splice(deviceIndex, 1, newDevice);
+            dispatch(updateGateway(row));
+        }
+    };
 
     return (
         <Fragment>
@@ -77,25 +91,35 @@ const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void })
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             <Typography variant="h6" gutterBottom component="div">
-                                History
+                                Devices
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>Customer</TableCell>
-                                        <TableCell align="right">Amount</TableCell>
-                                        <TableCell align="right">Total price ($)</TableCell>
+                                        <TableCell align="center">UUID</TableCell>
+                                        <TableCell align="center">Vendor</TableCell>
+                                        <TableCell align="center">Created At</TableCell>
+                                        <TableCell align="center">Status</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {(row.devices || []).map((historyRow: any) => (
-                                        <TableRow key={historyRow.date}>
-                                            <TableCell component="th" scope="row">
-                                                {historyRow.date}
+                                    {(row.devices || []).map((device: IDevice, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell align="center">{device.uuid}</TableCell>
+                                            <TableCell align="center">{device.vendor}</TableCell>
+                                            <TableCell align="center">{device.createdAt ? device.createdAt as any : 'no date'}</TableCell>
+                                            <TableCell align="center">
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch
+                                                            name={`${device.uuid}`}
+                                                            checked={device.status === DeviceStatusEnum.online}
+                                                            onChange={handleChangeStatus}
+                                                        />
+                                                    }
+                                                    label={device.status}
+                                                />
                                             </TableCell>
-                                            <TableCell>{historyRow.customerId}</TableCell>
-                                            <TableCell align="right">{historyRow.amount}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

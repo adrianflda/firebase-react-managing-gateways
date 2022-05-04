@@ -1,3 +1,4 @@
+import DeviceStatusEnum from "../enums/DeviceStatusEnum";
 import IGateway from "../models/IGateway";
 
 export const GATEWAYS: IGateway[] = [
@@ -5,7 +6,20 @@ export const GATEWAYS: IGateway[] = [
         serial: '1',
         name: 'nombre 1',
         address: '10.20.10.1',
-        devices: [],
+        devices: [
+            {
+                uuid: 121212,
+                vendor: 'vendedor',
+                createdAt: new Date(),
+                status: DeviceStatusEnum.online
+            },
+            {
+                uuid: 2222222,
+                vendor: 'vendedor2',
+                createdAt: new Date(),
+                status: DeviceStatusEnum.offline
+            }
+        ],
         deleted: false
     },
     {
