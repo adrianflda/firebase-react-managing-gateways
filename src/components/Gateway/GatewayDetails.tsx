@@ -22,22 +22,19 @@ const Img = styled('img')({
     maxHeight: '100%',
 });
 
-interface CustomProps {
-    onChange: (event: { target: { name: string; value: string } }) => void;
-    name: string;
-}
-
 const GatewayDetails = () => {
     const dispatch = useDispatch();
     const { serial } = useParams();
     const gateway = useSelector((state: any) => state.gateways.find((gateway: IGateway) => gateway.serial === serial));
     const [localState, setLocalState] = useState<{ edit: boolean }>({ edit: false });
     const [formValues, setFormValues] = useState<IGateway>({ name: "", serial: "", address: "", devices: [], deleted: false });
+
     useEffect(() => {
         if (gateway) {
             setFormValues({ ...gateway });
         }
     }, [gateway]);
+
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
         setFormValues({
@@ -45,43 +42,32 @@ const GatewayDetails = () => {
             [name]: value,
         });
     };
+
     const handleSubmit = (event: any) => {
         event.preventDefault();
         FirestoreService.isValidateGateway(formValues);
         dispatch(updateGateway(formValues));
         setLocalState({ edit: false });
     };
+
     const handleCancel = (event: any) => {
         event.preventDefault();
         setFormValues({ ...gateway });
         setLocalState({ edit: false });
     }
+
     const handleEdit = (event: any) => {
         event.preventDefault();
         setLocalState({ edit: !localState.edit });
     }
+
     const handleRemove = (event: any) => {
         event.preventDefault();
         if (gateway) {
             dispatch(toggleGatewayDelete(gateway.serial));
         }
     }
-    const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
-        function TextMaskCustom(props, ref) {
-            const { onChange, ...other } = props;
-            return (
-                <IMaskInput
-                    {...other}
-                    mask="###.###.###.###"
-                    definitions={{
-                        '#': /[0-9]/,
-                    }}
-                    onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
-                    overwrite
-                />
-            );
-        },
-    );
+
     return (
         <form onSubmit={handleSubmit}>
             <Paper
@@ -128,12 +114,16 @@ const GatewayDetails = () => {
                                 </FormControl>
                                 <FormControl variant="standard">
                                     <InputLabel htmlFor="address">Address</InputLabel>
-                                    <Input
+                                    <IMaskInput
                                         id="address-input"
-                                        name="address"
                                         type="text"
-                                        disabled={!localState.edit}
-                                        inputComponent={TextMaskCustom as any}
+                                        name='address'
+                                        mask="###.###.###.###"
+                                        definitions={{
+                                            '#': /[0-9]/,
+                                        }}
+                                        onAccept={(value: any) => handleInputChange({ target: { name: 'address', value } })}
+                                        overwrite
                                         value={formValues.address}
                                     />
                                 </FormControl>
@@ -161,7 +151,6 @@ const GatewayDetails = () => {
                                     </button>
                             }
                         </Grid>
-
                     </Grid>
                 </Grid>
             </Paper>

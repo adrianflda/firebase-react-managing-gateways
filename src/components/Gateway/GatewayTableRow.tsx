@@ -89,7 +89,7 @@ const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void })
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {row.devices.map((historyRow: any) => (
+                                    {(row.devices || []).map((historyRow: any) => (
                                         <TableRow key={historyRow.date}>
                                             <TableCell component="th" scope="row">
                                                 {historyRow.date}
