@@ -32,13 +32,14 @@ export default function GatewayDialog({ open, setOpen }: any) {
 
     const handleInputChange = (e: any) => {
         const { name, value } = e.target;
+        console.log(name, value);
         setFormValues({
             ...formValues,
             [name]: value,
         });
     };
 
-    const handleSubmit = (event: any) => {
+    const submit = (event: any) => {
         event.preventDefault();
         FirestoreService.isValidateGateway(formValues);
         console.log(formValues);
@@ -46,29 +47,12 @@ export default function GatewayDialog({ open, setOpen }: any) {
         setOpen(false);
     };
 
-    const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(
-        function TextMaskCustom(props, ref) {
-            const { onChange, ...other } = props;
-            return (
-                <IMaskInput
-                    {...other}
-                    mask="###.###.###.###"
-                    definitions={{
-                        '#': /[0-9]/,
-                    }}
-                    onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
-                    overwrite
-                />
-            );
-        },
-    );
-
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add New Gateway</DialogTitle>
                 <DialogContent>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={submit}>
                         <Paper
                             sx={{
                                 p: 2,
@@ -92,8 +76,8 @@ export default function GatewayDialog({ open, setOpen }: any) {
                                                 <InputLabel htmlFor="name">Name</InputLabel>
                                                 <Input
                                                     id="name-input"
-                                                    name="name"
                                                     type="text"
+                                                    name='name'
                                                     value={formValues.name}
                                                     onChange={handleInputChange}
                                                 />
@@ -102,8 +86,8 @@ export default function GatewayDialog({ open, setOpen }: any) {
                                                 <InputLabel htmlFor="serial">Serial</InputLabel>
                                                 <Input
                                                     id="serial-input"
-                                                    name="serial"
                                                     type="text"
+                                                    name='serial'
                                                     required
                                                     value={formValues.serial}
                                                     onChange={handleInputChange}
@@ -111,11 +95,16 @@ export default function GatewayDialog({ open, setOpen }: any) {
                                             </FormControl>
                                             <FormControl variant="standard">
                                                 <InputLabel htmlFor="address">Address</InputLabel>
-                                                <Input
+                                                <IMaskInput
                                                     id="address-input"
-                                                    name="address"
                                                     type="text"
-                                                    inputComponent={TextMaskCustom as any}
+                                                    name='address'
+                                                    mask="###.###.###.###"
+                                                    definitions={{
+                                                        '#': /[0-9]/,
+                                                    }}
+                                                    onAccept={(value: any) => handleInputChange({ target: { name: 'address', value } })}
+                                                    overwrite
                                                     value={formValues.address}
                                                 />
                                             </FormControl>
@@ -128,7 +117,7 @@ export default function GatewayDialog({ open, setOpen }: any) {
                 </DialogContent>
                 <DialogActions>
                     <button onClick={handleClose}>Cancel</button>
-                    <button onClick={handleSubmit}>Add</button>
+                    <button onClick={submit}>Add</button>
                 </DialogActions>
             </Dialog>
         </div>
