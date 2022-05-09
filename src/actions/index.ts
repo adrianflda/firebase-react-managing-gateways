@@ -18,3 +18,7 @@ export const toggleGatewayDelete = (serial: any) => ({
     type: TOGGLE_GATEWAY_DELETE,
     serial
 });
+
+export const updateDevice = (uuid: number) => ({
+
+});

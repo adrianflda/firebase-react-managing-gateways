@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
@@ -7,26 +8,26 @@ const AuthStatus = () => {
 
     if (!auth.user) {
         return <p>You are not logged in.
-            <button
+            <Button
                 onClick={() => {
                     navigate("/login");
                 }}
             >
                 Sign in
-            </button>
+            </Button>
         </p>;
     }
 
     return (
         <p>
             Welcome {auth.user}!{" "}
-            <button
+            <Button
                 onClick={() => {
                     auth.signout(() => navigate("/"));
                 }}
             >
                 Sign out
-            </button>
+            </Button>
         </p>
     );
 }

@@ -1,6 +1,6 @@
-enum DeviceStatus {
+enum DeviceStatusEnum {
     online = 'online',
     offline = 'offline'
 }
 
-export default DeviceStatus;
+export default DeviceStatusEnum;
