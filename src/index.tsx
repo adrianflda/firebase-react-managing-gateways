@@ -4,13 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Button } from '@mui/material';
 
 const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
   return (
     <div role="alert">
       <p>Something went wrong:</p>
       <pre>{error.message}</pre>
-      <button onClick={resetErrorBoundary}>Try again</button>
+      <Button onClick={resetErrorBoundary}>Try again</Button>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
@@ -27,7 +28,7 @@ const LoginPage = () => {
                 <label>
                     Username: <input name="username" type="text" />
                 </label>{" "}
-                <button type="submit">Login</button>
+                <Button type="submit">Login</Button>
             </form>
         </div>
     );

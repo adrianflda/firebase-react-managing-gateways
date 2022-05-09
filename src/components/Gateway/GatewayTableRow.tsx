@@ -24,7 +24,7 @@ import { DeleteSweep } from "@mui/icons-material";
 import IDevice from "../../models/IDevice";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 
-const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void }) => {
+const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any) => void }) => {
     const { row } = props;
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
@@ -107,7 +107,7 @@ const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void })
                                         <TableRow key={index}>
                                             <TableCell align="center">{device.uuid}</TableCell>
                                             <TableCell align="center">{device.vendor}</TableCell>
-                                            <TableCell align="center">{device.createdAt ? device.createdAt as any : 'no date'}</TableCell>
+                                            <TableCell align="center">{device.createdAt ? new Date(device.createdAt).toLocaleDateString() : 'no date'}</TableCell>
                                             <TableCell align="center">
                                                 <FormControlLabel
                                                     control={
@@ -132,4 +132,4 @@ const Row = (props: { row: IGateway, onClickItem: (e: any, item: any) => void })
     );
 }
 
-export default Row;
+export default GatewayTableRow;

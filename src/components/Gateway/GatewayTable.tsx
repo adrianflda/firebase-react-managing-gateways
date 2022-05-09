@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { } from 'react';
 import { useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,11 +11,13 @@ import TableHead from '@mui/material/TableHead';
 
 import IGateway from '../../models/IGateway';
 import FirestoreService from '../../services/FirestoreService';
-import Row from './GatewayTableRow';
+import GatewayTableRow from './GatewayTableRow';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
-import { Grid } from '@mui/material';
+import { Fab, Grid, SxProps, useTheme, Zoom } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import GatewayDialog from './GatewayDialog';
+import { FAV_STYLE } from '../../constants/globals';
 
 interface Column {
     id: 'name' | 'serial' | 'address' | 'deleted' | 'devices';
@@ -57,12 +59,18 @@ const columns: readonly Column[] = [
 ];
 
 export default function GatewayTable() {
+    const theme = useTheme();
     const navigate = useNavigate();
     const gateways = useSelector((state: any) => state.gateways);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = React.useState<IGateway[]>([])
     const [openGatewayDialog, setOpenGatewayDialog] = React.useState(false);
+
+    const transitionDuration = {
+        enter: theme.transitions.duration.enteringScreen,
+        exit: theme.transitions.duration.leavingScreen,
+    };
 
     React.useEffect(() => {
         void (async (): Promise<void> => {
@@ -98,50 +106,71 @@ export default function GatewayTable() {
     return (
         <>
             <GatewayDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} />
-            <Grid item alignSelf="end">
-                <button
+            <Paper sx={{
+                width: '100%',
+                overflow: 'hidden',
+                margin: 'auto',
+                maxWidth: '80%',
+            }}>
+                <Grid item xs container direction="column" spacing={2}>
+                    <Grid item alignSelf="center">
+                        Gateway list ...
+                    </Grid>
+                    <TableContainer>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    {columns.map((column) => (
+                                        <TableCell
+                                            key={column.id}
+                                            align={column.align}
+                                            style={{ minWidth: column.minWidth }}
+                                        >
+                                            {column.label}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {gateways
+                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    .map((row: IGateway) => {
+                                        return (
+                                            <GatewayTableRow key={row.name} row={row} onClickItem={(e) => handleOnClickItem(e, row)} />
+                                        );
+                                    })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={rows.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Grid>
+            </Paper>
+            <Zoom
+                key="add-new-gateway"
+                in={true}
+                timeout={transitionDuration}
+                style={{
+                    transitionDelay: `${transitionDuration.exit}ms`,
+                }}
+                unmountOnExit
+            >
+                <Fab
+                    sx={FAV_STYLE as SxProps}
+                    aria-label="Add Device"
+                    color="primary"
                     onClick={handleAddNewGateway}
                 >
-                    Add New Gatewway
-                </button>
-            </Grid>
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {gateways
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row: IGateway) => {
-                                    return (
-                                        <Row key={row.name} row={row} onClickItem={(e) => handleOnClickItem(e, row)} />
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+                    <AddIcon />
+                </Fab>
+            </Zoom>
         </>
     );
 }
