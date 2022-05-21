@@ -1,22 +1,20 @@
 import React from "react";
 import AuthContext from "../../contexts/AuthContext";
-import { fakeAuthProvider } from "../../feature/FakeAuthProvider";
+import FireAuthService from "../../services/FireAuthService";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let [user, setUser] = React.useState<any>(null);
 
-    let signin = (newUser: string, callback: VoidFunction) => {
-        return fakeAuthProvider.signin(() => {
-            setUser(newUser);
-            callback();
-        });
+    const signin = async (email: string, password: string, callback: VoidFunction) => {
+        await FireAuthService.loginWithEmail(email, password);
+        setUser(email);
+        callback();
     };
 
-    let signout = (callback: VoidFunction) => {
-        return fakeAuthProvider.signout(() => {
-            setUser(null);
-            callback();
-        });
+    const signout = async (callback: VoidFunction) => {
+        await FireAuthService.logout();
+        setUser(null);
+        callback();
     };
 
     let value = { user, signin, signout };
