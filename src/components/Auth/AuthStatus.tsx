@@ -20,7 +20,7 @@ const AuthStatus = () => {
 
     return (
         <p>
-            Welcome {auth.user}!{" "}
+            Welcome {auth.user.email}!{" "}
             <Button
                 onClick={() => {
                     auth.signout(() => navigate("/"));

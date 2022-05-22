@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Paper, Grid, FormControl, Button, TextField, FormControlLabel, Switch } from '@mui/material';
 import IGateway from '../../models/IGateway';
 import IDevice from '../../models/IDevice';
-import { updateGateway } from '../../actions';
+import { updateGateway } from '../../actions/GatewayActions';
 import DeviceStatusEnum from '../../enums/DeviceStatusEnum';
 
 interface IDeviceDialogProps {
@@ -52,7 +52,7 @@ export default function DeviceDialog({ gateway, open, setOpen }: IDeviceDialogPr
     return (
         <div>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add New Gateway</DialogTitle>
+                <DialogTitle>Add New Device</DialogTitle>
                 <DialogContent>
                     <form onSubmit={submit}>
                         <Paper

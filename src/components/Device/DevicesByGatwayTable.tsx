@@ -2,7 +2,7 @@ import React, { } from 'react';
 import { useDispatch } from 'react-redux';
 import IDevice from '../../models/IDevice';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { updateGateway } from '../../actions';
+import { updateGateway } from '../../actions/GatewayActions';
 import DeviceTableRow from './DevicesByGatwayTableRow';
 import IGateway from '../../models/IGateway';
 import DeviceStatusEnum from '../../enums/DeviceStatusEnum';

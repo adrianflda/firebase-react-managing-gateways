@@ -19,7 +19,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import IGateway from "../../models/IGateway";
-import { toggleGatewayDelete, updateGateway } from "../../actions";
+import { toggleGatewayDelete, updateGateway } from "../../actions/GatewayActions";
 import { DeleteSweep } from "@mui/icons-material";
 import IDevice from "../../models/IDevice";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
