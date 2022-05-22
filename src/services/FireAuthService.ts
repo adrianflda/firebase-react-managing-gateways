@@ -2,15 +2,47 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     onAuthStateChanged,
-    signInWithCustomToken,
     signInWithEmailAndPassword,
-    signOut
+    signOut,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    UserCredential,
+    sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth } from '.';
 
 const provider = new GoogleAuthProvider();
 
 class FireAuthService {
+
+    async signup(email: string, password: string, firstName: string, lastName?: string): Promise<UserCredential> {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await this.updateProfile(firstName, lastName);
+        return userCredential;
+    }
+
+    async updateProfile(firstName: string, lastName?: string, photoURL?: string): Promise<void | undefined | null> {
+        let displayName = '';
+        if (typeof firstName === 'string') {
+            displayName += firstName;
+        }
+        if (typeof lastName === 'string') {
+            displayName += ' ' + lastName;
+        }
+        return auth.currentUser && updateProfile(auth.currentUser, {
+            displayName, photoURL
+        });
+    }
+
+    async loginWithEmail(email: string, password: string): Promise<UserCredential> {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        return userCredential;
+    }
+
+    async sendPasswordChangeEmail(email: string): Promise<void> {
+        return sendPasswordResetEmail(auth, email);
+    }
+
     async loginWithGoogle(): Promise<void> {
         return signInWithPopup(auth, provider)
             .then((result) => {
@@ -37,26 +69,6 @@ class FireAuthService {
             });
     }
 
-    async loginWithEmail(email: string, password: string): Promise<any> {
-        return signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                return userCredential;
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
-    async loginWithToken(token: string): Promise<any> {
-        return signInWithCustomToken(auth, token)
-            .then((userCredential) => {
-                return userCredential;
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
     async logout(): Promise<void> {
         return signOut(auth)
             .catch((error) => {
@@ -68,7 +80,7 @@ class FireAuthService {
         onAuthStateChanged(auth, (user): void => {
             if (user) {
                 const uid = user.uid;
-                console.log(`User is signed in ${uid}`);
+                console.log(`User is signed in ${uid} `);
             } else {
                 console.log('User is signed out');
             }
