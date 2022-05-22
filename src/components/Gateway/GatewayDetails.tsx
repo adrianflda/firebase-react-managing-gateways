@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import IGateway from "../../models/IGateway";
 import FirestoreService from "../../services/FirestoreService";
-import { toggleGatewayDelete, updateGateway } from "../../actions";
+import { toggleGatewayDelete, updateGateway } from "../../actions/GatewayActions";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 import IDevice from "../../models/IDevice";
 import DevicesByGateway from "../Device/DevicesByGatwayTable";
