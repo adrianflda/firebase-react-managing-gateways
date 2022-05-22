@@ -30,18 +30,16 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function ResetPasswordPage() {
     const navigate = useNavigate();
-    const location = useLocation();
     const auth = useAuth();
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (typeof data.get('email') && data.get('password')) {
-            auth.signin(data.get('email') as string, data.get('password') as string, () => {
-                let from = (location.state as any)?.from?.pathname || "/";
-                navigate(from, { replace: true });
+        if (typeof data.get('email')) {
+            auth.resetPassword(data.get('email') as string, () => {
+                navigate('/login', { replace: true });
             });
         }
     };
@@ -62,7 +60,7 @@ export default function SignIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                        Reset Password
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
@@ -75,32 +73,22 @@ export default function SignIn() {
                             autoComplete="email"
                             autoFocus
                         />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign In
+                            Reset Password
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="/resetPassword" variant="body2">
-                                    Forgot password?
+                        <Grid item
+                            container
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="center">
+                            <Grid item alignContent='center'>
+                                <Link href="/login" variant="body2">
+                                    Already have an account? Sign in
                                 </Link>
                             </Grid>
                             <Grid item>

@@ -8,6 +8,8 @@ interface IRoute {
 interface IRoutes {
     HOME: IRoute;
     LOGIN: IRoute;
+    SIGNUP: IRoute;
+    RESET_PASSWORD: IRoute;
     GATEWAYS: IRoute;
     GATEWAYS_DETAILS: IRoute;
     DEVICES: IRoute;
@@ -22,6 +24,14 @@ export const ROUTES: IRoutes = {
     LOGIN: {
         name: "Login",
         staticRoute: '/login'
+    },
+    SIGNUP: {
+        name: "Signup",
+        staticRoute: '/signup'
+    },
+    RESET_PASSWORD: {
+        name: "Reset Password",
+        staticRoute: '/resetPassword'
     },
     GATEWAYS: {
         name: "Gateways",

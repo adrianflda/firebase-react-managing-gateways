@@ -8,6 +8,8 @@ import RequireAuth from "../components/Auth/RequireAuth";
 import Navbar from "../components/Navbar/Navbar";
 import { ROUTES } from "../constants/routes";
 import GatewayDetails from "../components/Gateway/GatewayDetails";
+import SignUpPage from "../components/Auth/SignupPage";
+import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
 
 const Router = () => {
     return (
@@ -16,6 +18,8 @@ const Router = () => {
             <Routes>
                 <Route path={ROUTES.HOME.staticRoute} element={<HomeView />} />
                 <Route path={ROUTES.LOGIN.staticRoute} element={<LoginPage />} />
+                <Route path={ROUTES.SIGNUP.staticRoute} element={<SignUpPage />} />
+                <Route path={ROUTES.RESET_PASSWORD.staticRoute} element={<ResetPasswordPage />} />
                 <Route
                     path={ROUTES.GATEWAYS.staticRoute}
                     element={
