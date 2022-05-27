@@ -10,10 +10,8 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import ProfileAvatar from '../Profile/ProfileAvatar';
-import { ROUTES } from '../../constants/routes';
+import { PAGE_LINKS } from '../../constants/routes';
 import { useNavigate } from 'react-router-dom';
-
-const PAGE_LINKS = Object.values(ROUTES).filter((route) => route.isNavbarItem);
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -101,7 +99,7 @@ const Navbar = () => {
             Firebase React Managing Gateways
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {PAGE_LINKS.map((route) => (
+            {PAGE_LINKS.map((route: any) => (
               <Button
                 key={route.name}
                 onClick={() => handleClick(route.staticRoute)}

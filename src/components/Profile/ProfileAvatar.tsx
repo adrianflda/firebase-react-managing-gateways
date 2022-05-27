@@ -3,18 +3,15 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AuthStatus from '../Auth/AuthStatus';
 
 const ProfileAvatar = ({ handleCloseUserMenu, handleOpenUserMenu, anchorElUser }: any) => {
     return <>
         <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar />
-                </IconButton>
-            </Tooltip>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar />
+            </IconButton>
             <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"

@@ -49,3 +49,5 @@ export const ROUTES: IRoutes = {
         isNavbarItem: true
     }
 }
+
+export const PAGE_LINKS = Object.values(ROUTES).filter((route) => route.isNavbarItem);
