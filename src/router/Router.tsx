@@ -1,30 +1,35 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import HomeView from '../components/Home/HomeView';
 import GatewayList from '../components/Gateway/GatewayTable';
 import DeviceListPage from '../components/Device/DeviceListPage';
 import LoginPage from "../components/Auth/LoginPage";
 import RequireAuth from "../components/Auth/RequireAuth";
-import Navbar from "../components/Navbar/Navbar";
 import { ROUTES } from "../constants/routes";
 import GatewayDetails from "../components/Gateway/GatewayDetails";
 import SignUpPage from "../components/Auth/SignupPage";
 import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
+import MainLayout from "../components/MainLayout/MainLayout";
 
 const Router = () => {
     return (
         <BrowserRouter>
-            <Navbar />
             <Routes>
-                <Route path={ROUTES.HOME.staticRoute} element={<HomeView />} />
                 <Route path={ROUTES.LOGIN.staticRoute} element={<LoginPage />} />
                 <Route path={ROUTES.SIGNUP.staticRoute} element={<SignUpPage />} />
                 <Route path={ROUTES.RESET_PASSWORD.staticRoute} element={<ResetPasswordPage />} />
                 <Route
+                    path={ROUTES.HOME.staticRoute}
+                    element={
+                        <RequireAuth>
+                            <MainLayout />
+                        </RequireAuth>
+                    }
+                />
+                <Route
                     path={ROUTES.GATEWAYS.staticRoute}
                     element={
                         <RequireAuth>
-                            <GatewayList />
+                            <MainLayout children={<GatewayList />} />
                         </RequireAuth>
                     }
                 />
@@ -32,7 +37,7 @@ const Router = () => {
                     path={ROUTES.GATEWAYS_DETAILS.staticRoute}
                     element={
                         <RequireAuth>
-                            <GatewayDetails />
+                            <MainLayout children={<GatewayDetails />} />
                         </RequireAuth>
                     }
                 />
@@ -40,7 +45,7 @@ const Router = () => {
                     path={ROUTES.DEVICES.staticRoute}
                     element={
                         <RequireAuth>
-                            <DeviceListPage />
+                            <MainLayout children={<DeviceListPage />} />
                         </RequireAuth>
                     }
                 />
