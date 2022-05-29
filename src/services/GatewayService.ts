@@ -1,5 +1,6 @@
 import DeviceStatusEnum from "../enums/DeviceStatusEnum";
-import IGateway from "../models/IGateway";
+import IGateway, { IGatewayResponse } from "../models/IGateway";
+import { getRequest, postRequest } from "./Axios";
 
 export const GATEWAYS: IGateway[] = [
     {
@@ -38,21 +39,19 @@ export const GATEWAYS: IGateway[] = [
     }
 ];
 
-class GatewayDataService {
-    async getAll(): Promise<IGateway[]> {
-        return Promise.resolve(GATEWAYS);
+class GatewayService {
+    async getAll(): Promise<IGatewayResponse> {
+        const response = await getRequest('gateways');
+        return response.data
     }
 
     async get(serial: string): Promise<IGateway | undefined> {
         return Promise.resolve(GATEWAYS.find((gateway) => gateway.serial === serial));
     }
 
-    async create(data: IGateway): Promise<IGateway> {
-        return Promise.resolve(data);
-    }
-
-    async update(serial: string, data: IGateway): Promise<IGateway | undefined> {
-        return Promise.resolve(data);
+    async upsert(newGateway: IGateway): Promise<IGatewayResponse> {
+        const response = await postRequest('gateways', newGateway);
+        return response.data
     }
 
     async delete(serial: string): Promise<IGateway | undefined> {
@@ -88,4 +87,4 @@ class GatewayDataService {
     }
 }
 
-export default new GatewayDataService();
+export default new GatewayService();

@@ -1,5 +1,5 @@
 import React, { } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import TableHead from '@mui/material/TableHead';
 
 import IGateway from '../../models/IGateway';
-import FirestoreService from '../../services/FirestoreService';
+import FirestoreService from '../../services/GatewayService';
 import GatewayTableRow from './GatewayTableRow';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
@@ -18,6 +18,8 @@ import { Fab, Grid, SxProps, useTheme, Zoom } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import GatewayDialog from './GatewayDialog';
 import { FAV_STYLE } from '../../constants/globals';
+import { getGatewayStateSelector } from '../../store/selectors/GatewaySelectors';
+import { getGateways } from '../../store/actions/GatewayActions';
 
 interface Column {
     id: 'name' | 'serial' | 'address' | 'deleted' | 'devices';
@@ -61,10 +63,10 @@ const columns: readonly Column[] = [
 export default function GatewayTable() {
     const theme = useTheme();
     const navigate = useNavigate();
-    const gateways = useSelector((state: any) => state.gateways);
+    const dispatch = useDispatch();
+    const { elements, loading, error } = useSelector(getGatewayStateSelector);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [rows, setRows] = React.useState<IGateway[]>([])
     const [openGatewayDialog, setOpenGatewayDialog] = React.useState(false);
 
     const transitionDuration = {
@@ -73,10 +75,8 @@ export default function GatewayTable() {
     };
 
     React.useEffect(() => {
-        void (async (): Promise<void> => {
-            setRows(await FirestoreService.getAll());
-        })()
-    }, []);
+        dispatch(getGateways());
+    }, [dispatch]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -101,6 +101,12 @@ export default function GatewayTable() {
     const handleAddNewGateway = (event: any) => {
         event.preventDefault();
         setOpenGatewayDialog(!openGatewayDialog);
+    }
+
+    if (error) {
+        return <React.Fragment>{error}</React.Fragment>;
+    } else if (loading) {
+        return <React.Fragment>{loading}</React.Fragment>;
     }
 
     return (
@@ -132,7 +138,7 @@ export default function GatewayTable() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {gateways
+                                {elements
                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     .map((row: IGateway) => {
                                         return (
@@ -145,7 +151,7 @@ export default function GatewayTable() {
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 100]}
                         component="div"
-                        count={rows.length}
+                        count={elements.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

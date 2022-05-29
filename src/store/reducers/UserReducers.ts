@@ -1,5 +1,8 @@
-import { SIGN_IN, SIGN_OUT } from '../constants/actions';
-import IUser from '../models/IUser';
+import {
+    SIGN_IN,
+    SIGN_OUT
+} from '../constants';
+import IUser from '../../models/IUser';
 
 // Check localStorage for saved Users, else return null array
 const storedUsers = () => {

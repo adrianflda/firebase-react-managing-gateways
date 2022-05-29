@@ -5,8 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Paper, Grid, FormControl, styled, Button, TextField } from '@mui/material';
-import { addGateway } from '../../actions/GatewayActions';
-import FirestoreService from '../../services/FirestoreService';
+import { addGateway } from '../../store/actions/GatewayActions';
+import FirestoreService from '../../services/GatewayService';
 import IGateway from '../../models/IGateway';
 
 interface IGatewayDialogProps {

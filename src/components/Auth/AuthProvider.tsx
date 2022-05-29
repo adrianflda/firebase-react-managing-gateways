@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { signinAction, signoutAction } from "../../actions/UserActions";
+import { signinAction, signoutAction } from "../../store/actions/UserActions";
 import AuthContext from "../../contexts/AuthContext";
 import IUser from "../../models/IUser";
 import FireAuthService from "../../services/FireAuthService";
