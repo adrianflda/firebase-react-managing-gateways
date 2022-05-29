@@ -2,7 +2,11 @@ import { combineReducers } from 'redux';
 import gateways from './GatewayReducers';
 import user from './UserReducers';
 
-export default combineReducers({
+const rootReducer = combineReducers({
     gateways,
     user
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
+
+export default rootReducer; 

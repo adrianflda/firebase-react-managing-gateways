@@ -1,5 +1,5 @@
-import { SIGN_IN, SIGN_OUT } from '../constants/actions';
-import IUser from '../models/IUser';
+import { SIGN_IN, SIGN_OUT } from '../constants';
+import IUser from '../../models/IUser';
 
 export const signinAction = (payload: IUser) => ({
     type: SIGN_IN,

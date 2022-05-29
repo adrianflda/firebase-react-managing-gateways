@@ -52,7 +52,6 @@ class FireAuthService {
                     const token = credential.accessToken;
                     // The signed-in user info.
                     const user = result.user;
-                    console.log(token, user);
                 } else {
                     throw new Error(' no credentials found');
                 }

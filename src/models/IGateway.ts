@@ -7,3 +7,9 @@ export default interface IGateway {
     devices: IDevice[],
     deleted: boolean
 }
+
+export interface IGatewayResponse {
+    data: { entries: IGateway[], lastElementId?: string | null, total?: number },
+    message: "Gateway processed successfully"
+    status: "success"
+}

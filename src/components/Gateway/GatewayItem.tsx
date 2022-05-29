@@ -8,7 +8,7 @@ import DnsIcon from '@mui/icons-material/Dns';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
-import { toggleGatewayDelete } from '../../actions/GatewayActions';
+import { toggleGatewayDelete } from '../../store/actions/GatewayActions';
 
 // Toggle gateway completed state
 const mapDispatchToProps = (dispatch: any) => {

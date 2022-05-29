@@ -14,20 +14,22 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import IGateway from "../../models/IGateway";
-import FirestoreService from "../../services/FirestoreService";
-import { toggleGatewayDelete, updateGateway } from "../../actions/GatewayActions";
+import FirestoreService from "../../services/GatewayService";
+import { getGateway, toggleGatewayDelete, updateGateway } from "../../store/actions/GatewayActions";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 import IDevice from "../../models/IDevice";
 import DevicesByGateway from "../Device/DevicesByGatwayTable";
 import AddIcon from '@mui/icons-material/Add';
 import { FAV_STYLE } from '../../constants/globals'
 import DeviceDialog from "../Device/DeviceDialog";
+import { getGatewayStateSelector } from "../../store/selectors/GatewaySelectors";
 
 const GatewayDetails = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { serial } = useParams();
-    const gateway = useSelector((state: any) => state.gateways.find((gateway: IGateway) => gateway.serial === serial));
+    const { elements, loading, error } = useSelector(getGatewayStateSelector);
+    const [gateway, setGateway] = useState<IGateway | null>(null);
     const [localState, setLocalState] = useState<{ edit: boolean }>({ edit: false });
     const [formValues, setFormValues] = useState<IGateway>({ name: "", serial: "", address: "", devices: [], deleted: false });
     const [formErrors, setFormErrors] = useState<any>({ name: "", serial: "", address: "" });
@@ -39,10 +41,14 @@ const GatewayDetails = () => {
     };
 
     useEffect(() => {
-        if (gateway) {
-            setFormValues({ ...gateway });
+        const gatewayFound = elements.find((gateway: IGateway) => gateway?.serial === serial);
+        if (gatewayFound) {
+            setGateway(gatewayFound);
+            setFormValues({ ...gatewayFound });
+        } else {
+            dispatch(getGateway(serial || ''));
         }
-    }, [gateway]);
+    }, [dispatch, elements, serial]);
 
     useEffect(() => {
         if (formValues && localState.edit) {
@@ -68,7 +74,7 @@ const GatewayDetails = () => {
 
     const handleCancel = (event: any) => {
         event.preventDefault();
-        setFormValues({ ...gateway });
+        // setFormValues({ ...gateway });
         setLocalState({ edit: false });
     }
 
@@ -80,19 +86,19 @@ const GatewayDetails = () => {
     const handleRemove = (event: any) => {
         event.preventDefault();
         if (gateway) {
-            dispatch(toggleGatewayDelete(gateway.serial));
+            dispatch(toggleGatewayDelete(gateway?.serial));
         }
     }
 
-    const handleChangeStatus = (e: any) => {
-        const { name: uuid, checked } = e.target;
-        const deviceIndex = (gateway.devices || []).findIndex((device: IDevice) => `${device.uuid}` === uuid);
-        if (deviceIndex > -1) {
-            const newDevice: IDevice = { ...gateway.devices[deviceIndex], status: checked ? DeviceStatusEnum.online : DeviceStatusEnum.offline };
-            gateway.devices.splice(deviceIndex, 1, newDevice);
-            dispatch(updateGateway(gateway));
-        }
-    };
+    /*     const handleChangeStatus = (e: any) => {
+            const { name: uuid, checked } = e.target;
+            const deviceIndex = (gateway?.devices || []).findIndex((device: IDevice) => `${device.uuid}` === uuid);
+            if (deviceIndex > -1) {
+                const newDevice: IDevice = { ...gateway?.devices[deviceIndex], status: checked ? DeviceStatusEnum.online : DeviceStatusEnum.offline };
+                gateway?.devices.splice(deviceIndex, 1, newDevice);
+                gateway && dispatch(updateGateway(gateway));
+            }
+        }; */
 
     const validateGatewayData = () => {
         try {
@@ -109,6 +115,18 @@ const GatewayDetails = () => {
     const handleAddNewDevice = (event: any) => {
         event.preventDefault();
         setOpenDeviceDialog(!openDeviceDialog);
+    }
+
+    if (!gateway) {
+        return <Fragment>
+            loading...
+        </Fragment>
+    }
+
+    if (loading) {
+        return <Fragment>
+            loading...
+        </Fragment>
     }
 
     return (
@@ -210,7 +228,7 @@ const GatewayDetails = () => {
                     <DevicesByGateway gateway={gateway} editMode={localState.edit} />
                 </Paper>
                 <Zoom
-                    key={gateway.serial}
+                    key={gateway?.serial}
                     in={true}
                     timeout={transitionDuration}
                     style={{
