@@ -10,13 +10,12 @@ import Paper from '@mui/material/Paper';
 import TableHead from '@mui/material/TableHead';
 
 import IGateway from '../../models/IGateway';
-import FirestoreService from '../../services/GatewayService';
 import GatewayTableRow from './GatewayTableRow';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import { Fab, Grid, SxProps, useTheme, Zoom } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import GatewayDialog from './GatewayDialog';
+import GatewayAddDialog from './GatewayAddDialog';
 import { FAV_STYLE } from '../../constants/globals';
 import { getGatewayStateSelector } from '../../store/selectors/GatewaySelectors';
 import { getGateways } from '../../store/actions/GatewayActions';
@@ -111,7 +110,7 @@ export default function GatewayTable() {
 
     return (
         <>
-            <GatewayDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} />
+            <GatewayAddDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} />
             <Paper sx={{
                 width: '100%',
                 overflow: 'hidden',

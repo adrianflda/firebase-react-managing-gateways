@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { signinAction, signoutAction } from "../../store/actions/UserActions";
 import AuthContext from "../../contexts/AuthContext";
 import IUser from "../../models/IUser";
-import FireAuthService from "../../services/FireAuthService";
+import FireAuthService, { storedUser } from "../../services/FireAuthService";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch();
-    let [user, setUser] = React.useState<any>(null);
+    let [user, setUser] = React.useState<any>(storedUser());
 
     const signin = async (email: string, password: string, callback: VoidFunction) => {
         const response = await FireAuthService.loginWithEmail(email, password);

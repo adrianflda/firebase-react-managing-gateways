@@ -13,6 +13,16 @@ import { auth } from '.';
 
 const provider = new GoogleAuthProvider();
 
+
+export const storedUser = () => {
+    const localUser = localStorage.getItem('user');
+    if (localUser) {
+        return JSON.parse(localUser);
+    } else {
+        return null;
+    }
+};
+
 class FireAuthService {
 
     async signup(email: string, password: string, firstName: string, lastName?: string): Promise<UserCredential> {

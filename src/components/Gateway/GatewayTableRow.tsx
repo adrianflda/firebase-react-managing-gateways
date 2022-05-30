@@ -19,20 +19,33 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import IGateway from "../../models/IGateway";
-import { toggleGatewayDelete, updateGateway } from "../../store/actions/GatewayActions";
+import { removeGateway, updateGateway } from "../../store/actions/GatewayActions";
 import { DeleteSweep } from "@mui/icons-material";
 import IDevice from "../../models/IDevice";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
+import GatewayRemoveDialog from './GatewayRemoveDialog';
 
 const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any) => void }) => {
     const { row } = props;
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
+    const [openGatewayDialog, setOpenGatewayDialog] = useState(false);
 
     const onItemRemove = (e: React.MouseEvent<HTMLElement>, serial: string) => {
         e.preventDefault();
-        dispatch(toggleGatewayDelete(serial));
+        setOpenGatewayDialog(true);
+        // dispatch(removeGateway(serial));
     }
+
+    const handleRemoveOk = () => {
+        dispatch(removeGateway(row.serial));
+        setOpenGatewayDialog(false);
+    }
+
+    const handleRemoveCancel = () => {
+        setOpenGatewayDialog(false);
+    }
+
 
     const handleChangeStatus = (e: any) => {
         const { name: uuid, checked } = e.target;
@@ -46,6 +59,7 @@ const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any
 
     return (
         <Fragment>
+            <GatewayRemoveDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} handleOk={handleRemoveOk} handleClose={handleRemoveCancel} />
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton

@@ -1,8 +1,8 @@
 import axios from 'axios'
+import { storedUser } from './FireAuthService';
 
 const getToken = () => {
-    const users = JSON.parse(localStorage.getItem("user") || '[]');
-    const user = users[0];
+    const user = storedUser();
     if (user) {
         return user.stsTokenManager.accessToken;
     } else {
