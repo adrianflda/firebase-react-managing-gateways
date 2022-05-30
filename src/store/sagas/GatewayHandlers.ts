@@ -1,5 +1,5 @@
 import { AnyAction } from "redux";
-import { call, put, takeLatest, takeEvery } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import IGateway, { IGatewayResponse } from "../../models/IGateway";
 import GatewayService from "../../services/GatewayService";
 import {
@@ -11,7 +11,10 @@ import {
     UPSERT_GATEWAY_SUCCESS,
     GET_GATEWAY_FAILED,
     GET_GATEWAY_REQUESTED,
-    GET_GATEWAY_SUCCESS
+    GET_GATEWAY_SUCCESS,
+    REMOVE_GATEWAY_REQUESTED,
+    REMOVE_GATEWAY_FAILED,
+    REMOVE_GATEWAY_SUCCESS
 } from "../constants";
 
 function* handleGetGateways() {
@@ -37,7 +40,7 @@ function* handleGetGateway(action: AnyAction) {
 }
 
 export function* watcherGetGatewaySaga() {
-    yield takeEvery(GET_GATEWAY_REQUESTED, handleGetGateway);
+    yield takeLatest(GET_GATEWAY_REQUESTED, handleGetGateway);
 }
 
 function* handleUpsertGateways(action: AnyAction) {
@@ -50,5 +53,18 @@ function* handleUpsertGateways(action: AnyAction) {
 }
 
 export function* watcherUpsertGatewaySaga() {
-    yield takeEvery(UPSERT_GATEWAY_REQUESTED, handleUpsertGateways);
+    yield takeLatest(UPSERT_GATEWAY_REQUESTED, handleUpsertGateways);
+}
+
+function* handleRemoveGateways(action: AnyAction) {
+    try {
+        const response: IGatewayResponse = yield call(GatewayService.delete, action.payload.serial);
+        yield put({ type: REMOVE_GATEWAY_SUCCESS, payload: { gateways: response.data } });
+    } catch (err: any) {
+        yield put({ type: REMOVE_GATEWAY_FAILED, payload: { error: err.message } });
+    }
+}
+
+export function* watcherRemoveGatewaySaga() {
+    yield takeLatest(REMOVE_GATEWAY_REQUESTED, handleRemoveGateways);
 }

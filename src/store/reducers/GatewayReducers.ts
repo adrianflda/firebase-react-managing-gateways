@@ -6,7 +6,9 @@ import {
     GET_GATEWAY_FAILED,
     GET_GATEWAY_REQUESTED,
     GET_GATEWAY_SUCCESS,
-    TOGGLE_GATEWAY_DELETE,
+    REMOVE_GATEWAY_FAILED,
+    REMOVE_GATEWAY_REQUESTED,
+    REMOVE_GATEWAY_SUCCESS,
     UPSERT_GATEWAY_FAILED,
     UPSERT_GATEWAY_REQUESTED,
     UPSERT_GATEWAY_SUCCESS,
@@ -32,6 +34,7 @@ const initialState: GatewayState = {
 
 // Each action as a switch case, to perform different actions to state
 const gateways = (state = initialState, action: any): GatewayState => {
+    console.log(action);
     let newGateway: IGateway;
     let filteredGateways: IGateway[];
     switch (action.type) {
@@ -44,17 +47,30 @@ const gateways = (state = initialState, action: any): GatewayState => {
             };
             break;
 
-        case TOGGLE_GATEWAY_DELETE:
-            const modifiedGateways = state.elements.map((gateway: IGateway) => {
-                if (gateway.serial === action.serial)
-                    return Object.assign({}, gateway, { deleted: !gateway.deleted });
-                return gateway;
-            });
+        case REMOVE_GATEWAY_REQUESTED:
+            state = {
+                ...state,
+                loading: true,
+                error: null,
+            };
+            break;
+
+        case REMOVE_GATEWAY_SUCCESS:
+            newGateway = action.payload.gateways.entries[0];
+            filteredGateways = state.elements.filter((gateway: IGateway) => gateway.serial !== newGateway.serial);
             state = {
                 ...state,
                 loading: false,
-                elements: modifiedGateways,
+                elements: filteredGateways,
                 error: null,
+            };
+            break;
+
+        case REMOVE_GATEWAY_FAILED:
+            state = {
+                ...state,
+                loading: false,
+                error: action.payload.error,
             };
             break;
 

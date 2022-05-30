@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,19 +7,6 @@ import DnsIcon from '@mui/icons-material/Dns';
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 
-import { toggleGatewayDelete } from '../../store/actions/GatewayActions';
-
-// Toggle gateway completed state
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        onItemRemove: (e: React.MouseEvent<HTMLElement>, serial: string) => {
-            e.preventDefault();
-            dispatch(toggleGatewayDelete(serial));
-        }
-    }
-}
-
-// Individual Gateway component, depending on state of completion, styles are applied
 const GatewayItem = ({ serial, name, deleted, address, devices, onItemRemove, onItemClick }: any) => {
     return (
         <ListItem
@@ -55,6 +41,4 @@ const GatewayItem = ({ serial, name, deleted, address, devices, onItemRemove, on
     )
 }
 
-
-
-export default connect(null, mapDispatchToProps)(GatewayItem);
+export default GatewayItem;

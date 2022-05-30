@@ -3,21 +3,12 @@ import {
     SIGN_OUT
 } from '../constants';
 import IUser from '../../models/IUser';
+import { storedUser } from '../../services/FireAuthService';
 
-// Check localStorage for saved Users, else return null array
-const storedUsers = () => {
-    const localUser = localStorage.getItem('user');
-    if (localUser) {
-        return JSON.parse(localUser);
-    } else {
-        return null;
-    }
-};
-
-const user = (state = storedUsers(), action: { type: string, payload: IUser }): IUser | {} => {
+const user = (state = storedUser(), action: { type: string, payload: IUser }): IUser | {} => {
     switch (action.type) {
         case SIGN_IN:
-            localStorage.setItem('user', JSON.stringify([action.payload]));
+            localStorage.setItem('user', JSON.stringify(action.payload));
             return action.payload;
 
         case SIGN_OUT:

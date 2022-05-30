@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import IGateway from "../../models/IGateway";
 import FirestoreService from "../../services/GatewayService";
-import { getGateway, toggleGatewayDelete, updateGateway } from "../../store/actions/GatewayActions";
+import { getGateway, removeGateway, updateGateway } from "../../store/actions/GatewayActions";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 import IDevice from "../../models/IDevice";
 import DevicesByGateway from "../Device/DevicesByGatwayTable";
@@ -86,7 +86,7 @@ const GatewayDetails = () => {
     const handleRemove = (event: any) => {
         event.preventDefault();
         if (gateway) {
-            dispatch(toggleGatewayDelete(gateway?.serial));
+            dispatch(removeGateway(gateway?.serial));
         }
     }
 

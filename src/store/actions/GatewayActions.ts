@@ -3,7 +3,7 @@ import {
     CLEAR_GATEWAYS,
     GET_GATEWAYS_REQUESTED,
     GET_GATEWAY_REQUESTED,
-    TOGGLE_GATEWAY_DELETE,
+    REMOVE_GATEWAY_REQUESTED,
     UPSERT_GATEWAY_REQUESTED,
 } from '../constants';
 
@@ -31,9 +31,9 @@ export const clearGateways = () => ({
     type: CLEAR_GATEWAYS
 });
 
-export const toggleGatewayDelete = (serial: any) => ({
-    type: TOGGLE_GATEWAY_DELETE,
-    serial
+export const removeGateway = (serial: any) => ({
+    type: REMOVE_GATEWAY_REQUESTED,
+    payload: { serial }
 });
 
 export const updateDevice = (uuid: number) => ({
