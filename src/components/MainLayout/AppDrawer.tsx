@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive'
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -17,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import ProfileAvatar from '../Profile/ProfileAvatar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import MyBottomNavigation from './BottomNavigation';
 
 const drawerWidth: number = 240;
 
@@ -120,6 +122,8 @@ export default function AppDrawer() {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -173,6 +177,7 @@ export default function AppDrawer() {
         />
       </Toolbar>
     </AppBar>
+
     <Drawer variant="permanent" open={open}>
       <Toolbar
         sx={{

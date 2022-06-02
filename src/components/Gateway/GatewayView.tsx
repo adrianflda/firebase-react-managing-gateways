@@ -8,6 +8,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TableHead from '@mui/material/TableHead';
+import { useMediaQuery } from 'react-responsive';
 
 import IGateway from '../../models/IGateway';
 import GatewayTableRow from './GatewayTableRow';
@@ -20,6 +21,8 @@ import { FAV_STYLE } from '../../constants/globals';
 import { getGatewayStateSelector } from '../../store/selectors/GatewaySelectors';
 import { getGateways } from '../../store/actions/GatewayActions';
 import Title from '../MainLayout/Title';
+import GatewayList from './GatewayList';
+import GatewayTable from './GatewayTable';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -41,26 +44,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-export default function GatewayTable({ gateways }: { gateways: IGateway[] }) {
+export default function GatewayView() {
     const theme = useTheme();
     const navigate = useNavigate();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const dispatch = useDispatch();
+    const { elements, loading, error } = useSelector(getGatewayStateSelector);
     const [openGatewayDialog, setOpenGatewayDialog] = React.useState(false);
+    const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' });
+    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+    const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
+    const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' });
 
     const transitionDuration = {
         enter: theme.transitions.duration.enteringScreen,
         exit: theme.transitions.duration.leavingScreen,
     };
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    React.useEffect(() => {
+        dispatch(getGateways());
+    }, [dispatch]);
 
     const handleOnClickItem = (e: any, row: IGateway) => {
         e.preventDefault();
@@ -78,45 +81,20 @@ export default function GatewayTable({ gateways }: { gateways: IGateway[] }) {
         setOpenGatewayDialog(!openGatewayDialog);
     }
 
+    if (error) {
+        return <React.Fragment>{error}</React.Fragment>;
+    } else if (loading) {
+        return <React.Fragment>{loading}</React.Fragment>;
+    }
+
+
+
     return (
         <>
             <GatewayAddDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} />
-            <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    <Title>Gateways</Title>
 
-                    <Table stickyHeader aria-label="sticky table" size="small">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell align="left">Devices</StyledTableCell>
-                                <StyledTableCell align="left">Name</StyledTableCell>
-                                <StyledTableCell align="center">Serial</StyledTableCell>
-                                <StyledTableCell align="center">Address</StyledTableCell>
-                                <StyledTableCell align="center">Actions</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {gateways
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row: IGateway) => {
-                                    return (
-                                        <GatewayTableRow key={row.name} row={row} onClickItem={(e) => handleOnClickItem(e, row)} />
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-
-                    <TablePagination
-                        rowsPerPageOptions={[10, 25, 100]}
-                        component="div"
-                        count={gateways.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                </Paper>
-            </Grid>
+            {isDesktopOrLaptop && <GatewayTable gateways={elements} />}
+            {isTabletOrMobile && <GatewayList gateways={elements} />}
 
             <Zoom
                 key="add-new-gateway"

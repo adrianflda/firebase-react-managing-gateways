@@ -7,12 +7,13 @@ import {
     IconButton,
     Collapse,
     Box,
-    Typography,
     Table,
     TableHead,
     TableBody,
     Switch,
-    FormControlLabel
+    FormControlLabel,
+    styled,
+    tableCellClasses
 } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -24,6 +25,27 @@ import { DeleteSweep } from "@mui/icons-material";
 import IDevice from "../../models/IDevice";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 import GatewayRemoveDialog from './GatewayRemoveDialog';
+import Title from "../MainLayout/Title";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+        border: 0,
+    },
+}));
 
 const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any) => void }) => {
     const { row } = props;
@@ -31,10 +53,9 @@ const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any
     const [open, setOpen] = useState(false);
     const [openGatewayDialog, setOpenGatewayDialog] = useState(false);
 
-    const onItemRemove = (e: React.MouseEvent<HTMLElement>, serial: string) => {
+    const onItemRemove = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         setOpenGatewayDialog(true);
-        // dispatch(removeGateway(serial));
     }
 
     const handleRemoveOk = () => {
@@ -60,7 +81,7 @@ const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any
     return (
         <Fragment>
             <GatewayRemoveDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} handleOk={handleRemoveOk} handleClose={handleRemoveCancel} />
-            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+            <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
                         aria-label="expand row"
@@ -94,26 +115,26 @@ const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any
                         edge="end"
                         aria-label="delete"
                         color={row.deleted ? 'success' : 'error'}
-                        onClick={e => onItemRemove(e, row.serial)}
+                        onClick={onItemRemove}
                     >
                         {row.deleted ? <DeleteSweep /> : <DeleteIcon />}
                     </IconButton>
                 </TableCell>
-            </TableRow>
+            </StyledTableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
+                            <Title>
                                 Devices
-                            </Typography>
-                            <Table size="small" aria-label="purchases">
+                            </Title>
+                            <Table size="small" aria-label="Devices">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="center">UUID</TableCell>
-                                        <TableCell align="center">Vendor</TableCell>
-                                        <TableCell align="center">Created At</TableCell>
-                                        <TableCell align="center">Status</TableCell>
+                                        <StyledTableCell align="center">UUID</StyledTableCell>
+                                        <StyledTableCell align="center">Vendor</StyledTableCell>
+                                        <StyledTableCell align="center">Created At</StyledTableCell>
+                                        <StyledTableCell align="center">Status</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

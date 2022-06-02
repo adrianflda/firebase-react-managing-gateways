@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import GatewayList from '../components/Gateway/GatewayTable';
+import GatewayView from '../components/Gateway/GatewayView';
 import DeviceListPage from '../components/Device/DeviceListPage';
 import LoginPage from "../components/Auth/LoginPage";
 import RequireAuth from "../components/Auth/RequireAuth";
@@ -29,7 +29,7 @@ const Router = () => {
                     path={ROUTES.GATEWAYS.staticRoute}
                     element={
                         <RequireAuth>
-                            <MainLayout children={<GatewayList />} />
+                            <MainLayout children={<GatewayView />} />
                         </RequireAuth>
                     }
                 />
