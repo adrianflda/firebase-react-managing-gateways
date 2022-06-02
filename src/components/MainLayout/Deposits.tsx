@@ -2,26 +2,37 @@ import * as React from 'react';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
+import { useSelector } from 'react-redux';
+import { getGatewayStateSelector } from '../../store/selectors/GatewaySelectors';
+import DeviceStatusEnum from '../../enums/DeviceStatusEnum';
 
 function preventDefault(event: React.MouseEvent) {
   event.preventDefault();
 }
 
 export default function Deposits() {
+  const { elements } = useSelector(getGatewayStateSelector);
+  const [totalOnlineDevices, setTotalOnlineDevices] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    let count = 0;
+    elements.forEach((gateway) => {
+      let onlineDevices = gateway.devices.filter((device) => device.status === DeviceStatusEnum.online).length;
+      count += onlineDevices;
+    })
+    setTotalOnlineDevices(count);
+  }, [elements]);
+
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
+      <Title>Total Gateways</Title>
       <Typography component="p" variant="h4">
-        $3,024.00
+        {elements.length}
       </Typography>
-      <Typography color="text.secondary" sx={{ flex: 1 }}>
-        on 15 March, 2019
+      <Title>Total Devices Online</Title>
+      <Typography component="p" variant="h4">
+        {totalOnlineDevices}
       </Typography>
-      <div>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          View balance
-        </Link>
-      </div>
     </React.Fragment>
   );
 }

@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import AppDrawer from './AppDrawer';
-import Home from './Home';
+import Home from '../Home/Home';
+import MyBottomNavigation from './BottomNavigation';
 
 function Copyright(props: any) {
   return (
@@ -27,6 +28,7 @@ function Copyright(props: any) {
 const mdTheme = createTheme();
 
 export default function MainLayout({ children }: { children?: JSX.Element }) {
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -49,7 +51,9 @@ export default function MainLayout({ children }: { children?: JSX.Element }) {
             {children || <Home />}
             <Copyright sx={{ pt: 4 }} />
           </Container>
+
         </Box>
+
       </Box>
     </ThemeProvider>
   );

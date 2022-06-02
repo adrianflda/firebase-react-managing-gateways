@@ -1,7 +1,7 @@
 import { Grid, Paper } from "@mui/material";
-import Chart from "./Chart";
-import Deposits from "./Deposits";
-import Orders from "./Orders";
+import Chart from "../MainLayout/Chart";
+import Deposits from "../MainLayout/Deposits";
+import Orders from "../MainLayout/Orders";
 
 export default function Home() {
     return <>

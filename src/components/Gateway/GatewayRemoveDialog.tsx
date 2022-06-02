@@ -18,8 +18,6 @@ export default function GatewayRemoveDialog({ open, setOpen, handleClose, handle
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
                 Attention!!!
@@ -30,8 +28,10 @@ export default function GatewayRemoveDialog({ open, setOpen, handleClose, handle
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>No</Button>
-                <Button onClick={handleOk} autoFocus>
+                <Button onClick={handleClose} autoFocus>
+                    No
+                </Button>
+                <Button onClick={handleOk} color='error' >
                     Yes
                 </Button>
             </DialogActions>
