@@ -119,7 +119,7 @@ export default function GatewayCard({ gateway }: { gateway: IGateway }) {
                         <Typography paragraph>Devices:</Typography>
                         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                             {gateway.devices.map((device: IDevice) => (
-                                <ListItem>
+                                <ListItem key={device.uuid}>
                                     <ListItemText primary={device.uuid} secondary={`Status: ${device.status}`} />
                                 </ListItem>
                             ))}
