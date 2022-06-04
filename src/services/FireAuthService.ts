@@ -7,7 +7,8 @@ import {
     createUserWithEmailAndPassword,
     updateProfile,
     UserCredential,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    onIdTokenChanged
 } from 'firebase/auth';
 import { auth } from '.';
 
@@ -85,15 +86,21 @@ class FireAuthService {
             });
     }
 
-    listenAuthStatusChanges(): void {
-        onAuthStateChanged(auth, (user): void => {
-            if (user) {
-                const uid = user.uid;
-                console.log(`User is signed in ${uid} `);
-            } else {
-                console.log('User is signed out');
-            }
-        });
+    listenAuthStatusChanges(callback: (user: any) => void): void {
+        if (typeof callback !== 'function') {
+            return;
+        }
+        onAuthStateChanged(auth, callback);
+    }
+
+    listenOnIdTokenChanged(callback: (user: any) => void, onErrorCallback: (error: any) => void) {
+        if (typeof callback !== 'function') {
+            return;
+        }
+        if (typeof callback !== 'function') {
+            return;
+        }
+        onIdTokenChanged(auth, callback, onErrorCallback);
     }
 }
 
