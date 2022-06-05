@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { signinAction, signoutAction } from "../../store/actions/UserActions";
+import { signinAction, signoutAction, signupAction } from "../../store/actions/UserActions";
 import AuthContext from "../../contexts/AuthContext";
 import IUser from "../../models/IUser";
 import FireAuthService, { storedUser } from "../../services/FireAuthService";
@@ -18,6 +18,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signup = async (email: string, password: string, firstName: string, lastName: string, callback: VoidFunction) => {
         const response = await FireAuthService.signup(email, password, firstName, lastName);
+        dispatch(signupAction({ uid: response.user.uid, email, firstName, lastName }));
         dispatch(signinAction(response.user as unknown as IUser));
         setUser(response.user);
         callback();

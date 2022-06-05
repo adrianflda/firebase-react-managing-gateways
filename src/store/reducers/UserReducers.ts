@@ -5,7 +5,7 @@ import {
 import IUser from '../../models/IUser';
 import { storedUser } from '../../services/FireAuthService';
 
-const user = (state = storedUser(), action: { type: string, payload: IUser }): IUser | {} => {
+const user = (state = storedUser(), action: { type: string, payload: IUser }): IUser | null => {
     switch (action.type) {
         case SIGN_IN:
             localStorage.setItem('user', JSON.stringify(action.payload));
@@ -13,7 +13,7 @@ const user = (state = storedUser(), action: { type: string, payload: IUser }): I
 
         case SIGN_OUT:
             localStorage.setItem('user', '');
-            return {};
+            return null;
 
         default:
             return state;
