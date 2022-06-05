@@ -1,4 +1,6 @@
-export default interface IUser {
+import { User } from "firebase/auth";
+
+export default interface IUser extends User {
     uid: string;
     email: string;
     emailVerified: boolean;

@@ -9,11 +9,8 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import AppDrawer from './AppDrawer';
 import Home from '../Home/Home';
-import MyBottomNavigation from './BottomNavigation';
 import FireAuthService from '../../services/FireAuthService';
-import { useDispatch, useSelector } from 'react-redux';
-import { signinAction, signoutAction } from '../../store/actions/UserActions';
-import { RootState } from '../../store/reducers';
+
 
 function Copyright(props: any) {
   return (
@@ -32,8 +29,6 @@ function Copyright(props: any) {
 const mdTheme = createTheme();
 
 export default function MainLayout({ children }: { children?: JSX.Element }) {
-  const dispatch = useDispatch();
-  const currentUser = useSelector((state: RootState) => state.user);
 
   FireAuthService.listenAuthStatusChanges((user): void => {
     if (user) {
@@ -41,24 +36,8 @@ export default function MainLayout({ children }: { children?: JSX.Element }) {
       console.log(`User is signed in ${uid} `);
     } else {
       console.log('User is signed out');
-      currentUser && dispatch(signoutAction());
     }
   });
-
-  FireAuthService.listenOnIdTokenChanged((user): void => {
-    if (user) {
-      const uid = user.uid;
-      console.log(`User is signed in ${uid} `);
-      currentUser && dispatch(signinAction(user));
-    } else {
-      currentUser && dispatch(signoutAction());
-    }
-  }, (error): void => {
-    console.log('Token refresh failed');
-    // TODO do something more pro here
-    console.error(error);
-    currentUser && dispatch(signoutAction());
-  })
 
   return (
     <ThemeProvider theme={mdTheme}>

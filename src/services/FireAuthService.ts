@@ -11,13 +11,17 @@ import {
     onIdTokenChanged
 } from 'firebase/auth';
 import { auth } from '.';
+import IUser from '../models/IUser';
 
 const provider = new GoogleAuthProvider();
 
-
-export const storedUser = () => {
+export const storedUser = (): IUser | null => {
+    const currentUser = auth.currentUser;
     const localUser = localStorage.getItem('user');
-    if (localUser) {
+    if (currentUser) {
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        return currentUser as IUser;
+    } else if (localUser) {
         return JSON.parse(localUser);
     } else {
         return null;
