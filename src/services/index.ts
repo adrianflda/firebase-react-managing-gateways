@@ -8,6 +8,7 @@ import {
 } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 import { browserSessionPersistence, connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth';
+import { connectStorageEmulator, getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -23,6 +24,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const analytics = getAnalytics(firebaseApp);
 const auth = getAuth(firebaseApp);
+export const storage = getStorage(firebaseApp);
 // TODO uncomment these lines if you will use firestore
 /* const db = initializeFirestore(firebaseApp, {
     cacheSizeBytes: CACHE_SIZE_UNLIMITED
@@ -34,6 +36,7 @@ if (location.hostname === 'localhost') {
     // TODO uncomment these lines if you will use firestore
     // connectFirestoreEmulator(db, process.env.REACT_APP_FIREBASE_FIRESTORE_EMULATOR_URL || 'localhost', 8099);
     connectAuthEmulator(auth, process.env.REACT_APP_FIREBASE_AUTH_EMULATOR_URL || 'localhost');
+    connectStorageEmulator(storage, 'localhost', 9199);
 }
 
 // TODO uncomment these lines if you will use firestore

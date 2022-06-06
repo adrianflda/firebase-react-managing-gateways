@@ -16,19 +16,19 @@ import { useParams } from "react-router-dom";
 import IGateway from "../../models/IGateway";
 import FirestoreService from "../../services/GatewayService";
 import { getGateway, removeGateway, updateGateway } from "../../store/actions/GatewayActions";
-import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
-import IDevice from "../../models/IDevice";
 import DevicesByGateway from "../Device/DevicesByGatwayTable";
 import AddIcon from '@mui/icons-material/Add';
 import { FAV_STYLE } from '../../constants/globals'
 import DeviceDialog from "../Device/DeviceDialog";
 import { getGatewayStateSelector } from "../../store/selectors/GatewaySelectors";
+import Image from '../Image/Image';
+import Title from "../MainLayout/Title";
 
 const GatewayDetails = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const { serial } = useParams();
-    const { elements, loading, error } = useSelector(getGatewayStateSelector);
+    const { elements, loading } = useSelector(getGatewayStateSelector);
     const [gateway, setGateway] = useState<IGateway | null>(null);
     const [localState, setLocalState] = useState<{ edit: boolean }>({ edit: false });
     const [formValues, setFormValues] = useState<IGateway>({ name: "", serial: "", address: "", devices: [], deleted: false });
@@ -74,7 +74,6 @@ const GatewayDetails = () => {
 
     const handleCancel = (event: any) => {
         event.preventDefault();
-        // setFormValues({ ...gateway });
         setLocalState({ edit: false });
     }
 
@@ -89,16 +88,6 @@ const GatewayDetails = () => {
             dispatch(removeGateway(gateway?.serial));
         }
     }
-
-    /*     const handleChangeStatus = (e: any) => {
-            const { name: uuid, checked } = e.target;
-            const deviceIndex = (gateway?.devices || []).findIndex((device: IDevice) => `${device.uuid}` === uuid);
-            if (deviceIndex > -1) {
-                const newDevice: IDevice = { ...gateway?.devices[deviceIndex], status: checked ? DeviceStatusEnum.online : DeviceStatusEnum.offline };
-                gateway?.devices.splice(deviceIndex, 1, newDevice);
-                gateway && dispatch(updateGateway(gateway));
-            }
-        }; */
 
     const validateGatewayData = () => {
         try {
@@ -141,91 +130,97 @@ const GatewayDetails = () => {
                         flexGrow: 1
                     }}
                 >
-                    <Grid container spacing={2} alignSelf="center">
-                        <Grid item xs={12} sm container>
-                            <Grid item xs container direction="column" spacing={2}>
-                                <Grid item alignSelf="center">
-                                    Gateway details ...
-                                </Grid>
-                                <Grid item alignSelf="end">
-                                    {
-                                        localState.edit ?
-                                            <>
-                                                <Button onClick={handleRemove} color={gateway?.deleted ? 'success' : 'error'}>
-                                                    {gateway?.deleted ? "Restore" : "Delete"}
-                                                </Button>
-                                                <Button onClick={handleEdit} color="warning">
-                                                    Cancel
-                                                </Button>
-
-                                            </> :
-                                            <Button onClick={handleEdit}>
-                                                Edit
-                                            </Button>
-                                    }
-                                </Grid>
-                                <Grid item container spacing={2} alignSelf="center">
-                                    <Grid item alignContent="space-around">
-                                        <FormControl variant="outlined">
-                                            <TextField
-                                                id="serial-input"
-                                                name="serial"
-                                                label="Serial"
-                                                type="text"
-                                                required
-                                                error={!formValues.serial}
-                                                helperText="Serial is required."
-                                                disabled={!localState.edit}
-                                                value={formValues.serial}
-                                                onChange={handleInputChange}
-                                                variant="outlined"
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item alignContent="space-around">
-                                        <FormControl variant="outlined">
-                                            <TextField
-                                                id="name-input"
-                                                name="name"
-                                                label="Name"
-                                                type="text"
-                                                disabled={!localState.edit}
-                                                value={formValues.name}
-                                                onChange={handleInputChange}
-                                                variant="outlined"
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item alignContent="space-around">
-                                        <FormControl variant="outlined">
-                                            <TextField
-                                                id="address-input"
-                                                type="text"
-                                                name='address'
-                                                label="Address"
-                                                value={formValues.address}
-                                                onChange={handleInputChange}
-                                                error={!!formErrors.address}
-                                                helperText={formErrors.address}
-                                                disabled={!localState.edit}
-                                                variant="outlined"
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                </Grid>
-                                {
-                                    localState.edit &&
-                                    <Grid item alignSelf="end">
-                                        <Button type="submit" color="success">
-                                            Save
+                    <Grid item xs container direction="column" spacing={2}>
+                        <Grid item alignSelf="center">
+                            <Title>Gateway details:</Title>
+                        </Grid>
+                        <Grid item alignSelf="end">
+                            {
+                                localState.edit ?
+                                    <>
+                                        <Button onClick={handleRemove} color={gateway?.deleted ? 'success' : 'error'}>
+                                            {gateway?.deleted ? "Restore" : "Delete"}
                                         </Button>
-                                    </Grid>
-                                }
-                                <Divider hidden />
+                                        <Button onClick={handleCancel} color="warning">
+                                            Cancel
+                                        </Button>
+
+                                    </> :
+                                    <Button onClick={handleEdit}>
+                                        Edit
+                                    </Button>
+                            }
+                        </Grid>
+                        <Grid item container spacing={2} alignSelf="center">
+                            <Grid item alignContent="space-around">
+                                <Image
+                                    imageRoute={`gatewayImages/${gateway.serial}/`}
+                                    imageName={gateway.name}
+                                    editable={localState.edit}
+                                />
+                            </Grid>
+                            <Grid item alignContent="space-around">
+                                <FormControl variant="outlined">
+                                    <TextField
+                                        id="serial-input"
+                                        name="serial"
+                                        label="Serial"
+                                        type="text"
+                                        required
+                                        error={!formValues.serial}
+                                        helperText="Serial is required."
+                                        disabled={!localState.edit}
+                                        value={formValues.serial}
+                                        onChange={handleInputChange}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item alignContent="space-around">
+                                <FormControl variant="outlined">
+                                    <TextField
+                                        id="name-input"
+                                        name="name"
+                                        label="Name"
+                                        type="text"
+                                        disabled={!localState.edit}
+                                        value={formValues.name}
+                                        onChange={handleInputChange}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item alignContent="space-around">
+                                <FormControl variant="outlined">
+                                    <TextField
+                                        id="address-input"
+                                        type="text"
+                                        name='address'
+                                        label="Address"
+                                        value={formValues.address}
+                                        onChange={handleInputChange}
+                                        error={!!formErrors.address}
+                                        helperText={formErrors.address}
+                                        disabled={!localState.edit}
+                                        variant="outlined"
+                                    />
+                                </FormControl>
                             </Grid>
                         </Grid>
+                        {
+                            localState.edit &&
+                            <Grid item alignSelf="end">
+                                <Button type="submit" color="success">
+                                    Save
+                                </Button>
+                            </Grid>
+                        }
+                        <Divider hidden />
                     </Grid>
-                    <DevicesByGateway gateway={gateway} editMode={localState.edit} />
+
+                    <Grid container alignSelf="center">
+                        <DevicesByGateway gateway={gateway} editMode={localState.edit} />
+                    </Grid>
                 </Paper>
                 <Zoom
                     key={gateway?.serial}

@@ -1,11 +1,12 @@
 import React, { } from 'react';
 import { useDispatch } from 'react-redux';
 import IDevice from '../../models/IDevice';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { updateGateway } from '../../store/actions/GatewayActions';
 import DeviceTableRow from './DevicesByGatwayTableRow';
 import IGateway from '../../models/IGateway';
 import DeviceStatusEnum from '../../enums/DeviceStatusEnum';
+import Title from '../MainLayout/Title';
 
 interface Column {
     id: 'createdAt' | 'uuid' | 'vendor' | 'status' | 'actions';
@@ -69,7 +70,10 @@ export default function DeviceTable({ gateway, editMode = true }: IDeviceTablePr
     };
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Grid item xs container direction="column" spacing={2}>
+            <Grid item alignSelf="center">
+                <Title>Devices:</Title>
+            </Grid>
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -100,6 +104,6 @@ export default function DeviceTable({ gateway, editMode = true }: IDeviceTablePr
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Paper>
+        </Grid>
     );
 }

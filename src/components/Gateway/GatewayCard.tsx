@@ -12,14 +12,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import IGateway from '../../models/IGateway';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ROUTES } from '../../constants/routes';
-import { removeGateway, updateGateway } from '../../store/actions/GatewayActions';
+import { removeGateway } from '../../store/actions/GatewayActions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import GatewayRemoveDialog from './GatewayRemoveDialog';
-import { Avatar, FormControlLabel, Grid, List, ListItem, ListItemAvatar, ListItemText, Switch } from '@mui/material';
+import { CardMedia, List, ListItem, ListItemText } from '@mui/material';
 import IDevice from '../../models/IDevice';
-import DeviceStatusEnum from '../../enums/DeviceStatusEnum';
+import Image from '../Image/Image';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -69,17 +69,17 @@ export default function GatewayCard({ gateway }: { gateway: IGateway }) {
         }
     }
 
-    const handleChangeStatus = (deviceToChangeStatus: IDevice) => {
-        const deviceIndex = (gateway.devices || []).findIndex((device: IDevice) => device.uuid === deviceToChangeStatus.uuid);
-        deviceToChangeStatus.status = deviceToChangeStatus.status === DeviceStatusEnum.online ? DeviceStatusEnum.offline : DeviceStatusEnum.online;
-        gateway.devices.splice(deviceIndex, 1, deviceToChangeStatus);
-        dispatch(updateGateway(gateway));
-    };
-
     return (
         <>
             <GatewayRemoveDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} handleOk={handleRemoveOk} handleClose={handleRemoveCancel} />
             <Card sx={{ maxWidth: 355 }}>
+                <CardMedia>
+                    <Image
+                        imageRoute={`gatewayImages/${gateway.serial}/`}
+                        imageName={gateway.name}
+                        editable={false}
+                    />
+                </CardMedia>
                 <CardHeader
                     title={gateway.name}
                     subheader={`Serial: ${gateway.serial}`}
