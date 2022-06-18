@@ -11,7 +11,7 @@ const Input = styled('input')({
     display: 'none',
 });
 
-function Image({ editable, imageRoute, imageName }: { editable: boolean, imageRoute: string, imageName: string }) {
+function Image({ editable, imageRoute, imageName, size = 50 }: { editable: boolean, imageRoute: string, imageName: string, size?: number }) {
     const user = useSelector((state: RootState) => state.user);
     const [imgUrl, setImgUrl] = useState<string>('');
     const [progressPercent, setProgressPercent] = useState(0);
@@ -88,9 +88,9 @@ function Image({ editable, imageRoute, imageName }: { editable: boolean, imageRo
                 <Avatar
                     alt="Gateway Image"
                     src={imgUrl}
-                    sx={{ width: 100, height: 100 }}
+                    sx={{ width: size + 20, height: size + 20 }}
                 >
-                    <RouterOutlinedIcon sx={{ fontSize: 80 }} />
+                    <RouterOutlinedIcon sx={{ fontSize: size }} />
                 </Avatar>
 
             </Badge>

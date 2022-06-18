@@ -13,6 +13,7 @@ interface IRoutes {
     GATEWAYS: IRoute;
     GATEWAYS_DETAILS: IRoute;
     DEVICES: IRoute;
+    DEVICES_DETAILS: IRoute;
 }
 
 export const ROUTES: IRoutes = {
@@ -47,6 +48,11 @@ export const ROUTES: IRoutes = {
         name: 'Devices',
         staticRoute: '/devices',
         isNavbarItem: true
+    },
+    DEVICES_DETAILS: {
+        name: "Devices Details",
+        staticRoute: '/devices/:uuid',
+        dynamicRoute: (uuid: string) => `${ROUTES.DEVICES.staticRoute}/${uuid}`
     }
 }
 

@@ -1,24 +1,37 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { DateTime } from 'luxon';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Paper, Grid, FormControl, Button, TextField, FormControlLabel, Switch } from '@mui/material';
+import { Paper, Grid, FormControl, Button, TextField, FormControlLabel, Switch, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import IGateway from '../../models/IGateway';
 import IDevice from '../../models/IDevice';
 import { updateGateway } from '../../store/actions/GatewayActions';
 import DeviceStatusEnum from '../../enums/DeviceStatusEnum';
+import { getGatewayStateSelector } from '../../store/selectors/GatewaySelectors';
 
 interface IDeviceDialogProps {
-    gateway: IGateway,
+    gateway?: IGateway | null,
     open: boolean,
     setOpen: (open: boolean) => void
 }
-export default function DeviceDialog({ gateway, open, setOpen }: IDeviceDialogProps) {
+export default function DeviceDialog({ gateway = null, open, setOpen }: IDeviceDialogProps) {
     const dispatch = useDispatch();
+    const { elements } = useSelector(getGatewayStateSelector);
+    const [localGateway, setLocalGateway] = useState<IGateway | null>(gateway);
+    const [localGatewaySerial, setLocalGatewaySerial] = React.useState('');
     const [formValues, setFormValues] = useState<IDevice>({ uuid: new Date().getTime(), vendor: "", createdAt: new Date(), status: DeviceStatusEnum.offline });
+
+    useEffect(() => {
+        if (localGatewaySerial) {
+            const element = elements.find((e) => e.serial === localGatewaySerial);
+            if (element) {
+                setLocalGateway(element);
+            }
+        }
+    }, [elements, localGatewaySerial]);
 
     const getDate = (): string => {
         return DateTime.fromJSDate(formValues.createdAt).toFormat('yyyy-MM-dd');
@@ -42,11 +55,18 @@ export default function DeviceDialog({ gateway, open, setOpen }: IDeviceDialogPr
         });
     };
 
+    const handleGatewaySelection = (event: SelectChangeEvent) => {
+        setLocalGatewaySerial(event.target.value as string);
+    }
+
     const submit = (event: any) => {
         event.preventDefault();
-        gateway.devices = [...gateway.devices, formValues]
+        if (!localGateway) {
+            return;
+        }
+        localGateway.devices = [...localGateway.devices, formValues]
         setOpen(false);
-        dispatch(updateGateway(gateway));
+        dispatch(updateGateway(localGateway));
     };
 
     return (
@@ -63,6 +83,29 @@ export default function DeviceDialog({ gateway, open, setOpen }: IDeviceDialogPr
                             }}
                         >
                             <Grid container direction="column" spacing={2} alignSelf="center" alignItems="center">
+                                <Grid item alignContent="space-around">
+                                    <FormControl fullWidth>
+                                        <InputLabel id="select-gateway-label">Gateway</InputLabel>
+                                        <Select
+                                            labelId="select-gateway-label"
+                                            id="select-gateway"
+                                            value={localGatewaySerial}
+                                            label="Gateway"
+                                            onChange={handleGatewaySelection}
+                                        >
+                                            {
+                                                elements.map((element: IGateway) =>
+                                                    <MenuItem
+                                                        key={element.serial}
+                                                        value={element.serial}
+                                                    >
+                                                        {element.name}
+                                                    </MenuItem>
+                                                )
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
                                 <Grid item alignContent="space-around">
                                     <FormControl variant="outlined">
                                         <TextField

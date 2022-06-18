@@ -7,7 +7,7 @@ import GatewayCard from './GatewayCard';
 export default function GatewayList({ gateways }: { gateways: IGateway[] }) {
     return (
         <Box sx={{ flexGrow: 1, overflow: 'hidden', px: 3 }}>
-            <Title>List</Title>
+            <Title>Gateways</Title>
             <Grid container spacing={4}>
                 {gateways.map((gateway) => (
                     <Grid item key={gateway.serial} xs={12} sm={6} md={4}>

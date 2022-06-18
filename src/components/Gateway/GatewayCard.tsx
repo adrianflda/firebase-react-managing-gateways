@@ -17,9 +17,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import GatewayRemoveDialog from './GatewayRemoveDialog';
-import { CardMedia, List, ListItem, ListItemText } from '@mui/material';
+import { FormControlLabel, List, ListItem, ListItemText, Switch } from '@mui/material';
 import IDevice from '../../models/IDevice';
 import Image from '../Image/Image';
+import DeviceStatusEnum from '../../enums/DeviceStatusEnum';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -73,14 +74,14 @@ export default function GatewayCard({ gateway }: { gateway: IGateway }) {
         <>
             <GatewayRemoveDialog open={openGatewayDialog} setOpen={setOpenGatewayDialog} handleOk={handleRemoveOk} handleClose={handleRemoveCancel} />
             <Card sx={{ maxWidth: 355 }}>
-                <CardMedia>
-                    <Image
-                        imageRoute={`gatewayImages/${gateway.serial}/`}
-                        imageName={gateway.name}
-                        editable={false}
-                    />
-                </CardMedia>
                 <CardHeader
+                    avatar={
+                        <Image
+                            imageRoute={`gatewayImages/${gateway.serial}/`}
+                            imageName={gateway.name}
+                            editable={false}
+                        />
+                    }
                     title={gateway.name}
                     subheader={`Serial: ${gateway.serial}`}
                 />
@@ -120,7 +121,18 @@ export default function GatewayCard({ gateway }: { gateway: IGateway }) {
                         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                             {gateway.devices.map((device: IDevice) => (
                                 <ListItem key={device.uuid}>
-                                    <ListItemText primary={device.uuid} secondary={`Status: ${device.status}`} />
+                                    <ListItemText
+                                        primary={device.uuid}
+                                        secondary={
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch
+                                                        checked={device.status === DeviceStatusEnum.online}
+                                                    />
+                                                }
+                                                label={device.status}
+                                            />
+                                        } />
                                 </ListItem>
                             ))}
                         </List>
