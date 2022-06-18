@@ -152,11 +152,12 @@ const GatewayDetails = () => {
                             }
                         </Grid>
                         <Grid item container spacing={2} alignSelf="center">
-                            <Grid item alignContent="space-around">
+                            <Grid item container alignContent="center">
                                 <Image
                                     imageRoute={`gatewayImages/${gateway.serial}/`}
                                     imageName={gateway.name}
                                     editable={localState.edit}
+                                    size={80}
                                 />
                             </Grid>
                             <Grid item alignContent="space-around">

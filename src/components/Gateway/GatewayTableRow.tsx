@@ -26,6 +26,7 @@ import IDevice from "../../models/IDevice";
 import DeviceStatusEnum from "../../enums/DeviceStatusEnum";
 import GatewayRemoveDialog from './GatewayRemoveDialog';
 import Title from "../MainLayout/Title";
+import Image from "../Image/Image";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -90,6 +91,18 @@ const GatewayTableRow = (props: { row: IGateway, onClickItem: (e: any, item: any
                     >
                         {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                     </IconButton>
+                </TableCell>
+                <TableCell
+                    component="th"
+                    scope="row"
+                    onClick={(e) => props.onClickItem(e, row.serial)}
+                >
+                    <Image
+                        imageRoute={`gatewayImages/${row.serial}/`}
+                        imageName={row.name}
+                        editable={false}
+                        size={30}
+                    />
                 </TableCell>
                 <TableCell
                     component="th"

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import GatewayView from '../components/Gateway/GatewayView';
-import DeviceListPage from '../components/Device/DeviceListPage';
+import DeviceView from '../components/Device/DeviceView';
 import LoginPage from "../components/Auth/LoginPage";
 import RequireAuth from "../components/Auth/RequireAuth";
 import { ROUTES } from "../constants/routes";
@@ -9,6 +9,7 @@ import GatewayDetails from "../components/Gateway/GatewayDetails";
 import SignUpPage from "../components/Auth/SignupPage";
 import ResetPasswordPage from "../components/Auth/ResetPasswordPage";
 import MainLayout from "../components/MainLayout/MainLayout";
+import DeviceDetails from "../components/Device/DeviceDetails";
 
 const Router = () => {
     return (
@@ -45,7 +46,15 @@ const Router = () => {
                     path={ROUTES.DEVICES.staticRoute}
                     element={
                         <RequireAuth>
-                            <MainLayout children={<DeviceListPage />} />
+                            <MainLayout children={<DeviceView />} />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path={ROUTES.DEVICES_DETAILS.staticRoute}
+                    element={
+                        <RequireAuth>
+                            <MainLayout children={<DeviceDetails />} />
                         </RequireAuth>
                     }
                 />

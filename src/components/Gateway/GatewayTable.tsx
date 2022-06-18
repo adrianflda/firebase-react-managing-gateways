@@ -1,9 +1,7 @@
 import React, { } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
@@ -17,8 +15,6 @@ import { Fab, Grid, styled, SxProps, useTheme, Zoom } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import GatewayAddDialog from './GatewayAddDialog';
 import { FAV_STYLE } from '../../constants/globals';
-import { getGatewayStateSelector } from '../../store/selectors/GatewaySelectors';
-import { getGateways } from '../../store/actions/GatewayActions';
 import Title from '../MainLayout/Title';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -28,16 +24,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
-    },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-        border: 0,
     },
 }));
 
@@ -89,6 +75,7 @@ export default function GatewayTable({ gateways }: { gateways: IGateway[] }) {
                         <TableHead>
                             <TableRow>
                                 <StyledTableCell align="left">Devices</StyledTableCell>
+                                <StyledTableCell align="left">Picture</StyledTableCell>
                                 <StyledTableCell align="left">Name</StyledTableCell>
                                 <StyledTableCell align="center">Serial</StyledTableCell>
                                 <StyledTableCell align="center">Address</StyledTableCell>
